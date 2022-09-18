@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
-require "mailmap"
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+require 'mailmap'
 
-require "minitest/autorun"
+require 'minitest/autorun'
