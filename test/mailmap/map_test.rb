@@ -4,7 +4,7 @@ require 'tempfile'
 require 'test_helper'
 
 module Mailmap
-  class MapTest < Minitest::Test
+  class MapTest < Minitest::Test # rubocop:disable Metrics/ClassLength
     def test_load
       Tempfile.open('mailmap') do |f|
         f.write(<<~MAILMAP)
@@ -12,6 +12,27 @@ module Mailmap
         MAILMAP
         assert_kind_of(Map, Map.load(f.path))
       end
+    end
+
+    def test_each
+      mailmap = Map.parse(<<~MAILMAP)
+        Joe R. Developer <joe@example.com>
+        Jane Doe <jane@example.com> <jane@laptop.(none)>
+        Jane Doe <jane@example.com> <jane@desktop.(none)>
+      MAILMAP
+      enumerator = mailmap.each
+      assert_equal(['Joe R. Developer', nil, nil, 'joe@example.com'], enumerator.next)
+      assert_equal(['Jane Doe', 'jane@example.com', nil, 'jane@laptop.(none)'], enumerator.next)
+      assert_equal(['Jane Doe', 'jane@example.com', nil, 'jane@desktop.(none)'], enumerator.next)
+    end
+
+    def test_count
+      mailmap = Map.parse(<<~MAILMAP)
+        Joe R. Developer <joe@example.com>
+        Jane Doe <jane@example.com> <jane@laptop.(none)>
+        Jane Doe <jane@example.com> <jane@desktop.(none)>
+      MAILMAP
+      assert_equal(3, mailmap.count)
     end
 
     def test_find_without_commit_name

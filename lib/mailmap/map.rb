@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'forwardable'
 require 'strscan'
 
 module Mailmap
@@ -9,6 +10,10 @@ module Mailmap
 
   # A Map represents a .mailmap file.
   class Map
+    extend Forwardable
+
+    def_delegators :each, *Enumerable.instance_methods(false)
+
     class << self
       # Load a mailmap file and return Map object.
       #
@@ -25,6 +30,16 @@ module Mailmap
     def initialize(string)
       @map = Hash.new { |h, k| h[k] = {} }
       parse(string)
+    end
+
+    def each
+      return enum_for(:each) unless block_given?
+
+      @map.each do |commit_email, entries_by_commit_name|
+        entries_by_commit_name.each do |commit_name, (proper_name, proper_email)|
+          yield [proper_name, proper_email, commit_name, commit_email]
+        end
+      end
     end
 
     # Look up the person's canonical name and email address.
