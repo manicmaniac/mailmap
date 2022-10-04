@@ -88,6 +88,53 @@ module Mailmap
       MAILMAP
       assert_equal([nil, 'nonexistent@email.xx'], mailmap.resolve(nil, 'nonexistent@email.xx'))
     end
+
+    def test_include_name
+      mailmap = Map.parse(<<~MAILMAP)
+        Proper Name <proper@email.xx> Commit Name <commit@email.xx>
+      MAILMAP
+      assert(mailmap.include_name?('Proper Name'))
+      assert(mailmap.include_name?('Commit Name'))
+    end
+
+    def test_include_name_with_nonexistent_name
+      mailmap = Map.parse(<<~MAILMAP)
+        Proper Name <proper@email.xx> Commit Name <commit@email.xx>
+      MAILMAP
+      refute(mailmap.include_name?('Missing Name'))
+    end
+
+    def test_include_name_with_incorrect_case
+      mailmap = Map.parse(<<~MAILMAP)
+        Proper Name <proper@email.xx> Commit Name <commit@email.xx>
+      MAILMAP
+      assert(mailmap.include_name?('proper name'))
+      assert(mailmap.include_name?('commit name'))
+    end
+
+    def test_include_email
+      mailmap = Map.parse(<<~MAILMAP)
+        Proper Name <proper@email.xx> Commit Name <commit@email.xx>
+      MAILMAP
+      assert(mailmap.include_email?('proper@email.xx'))
+      assert(mailmap.include_email?('commit@email.xx'))
+    end
+
+    def test_include_email_with_nonexistent_email
+      mailmap = Map.parse(<<~MAILMAP)
+        Proper Name <proper@email.xx> Commit Name <commit@email.xx>
+      MAILMAP
+      refute(mailmap.include_email?('missing@email.xx'))
+    end
+
+    def test_include_email_with_incorrect_case
+      mailmap = Map.parse(<<~MAILMAP)
+        Proper Name <proper@email.xx> Commit Name <commit@email.xx>
+      MAILMAP
+      assert(mailmap.include_email?('Proper@email.xx'))
+      assert(mailmap.include_email?('Commit@email.xx'))
+    end
+
     def test_parse_with_empty
       mailmap = Map.parse('')
       assert_empty(mailmap.instance_variable_get(:@map))

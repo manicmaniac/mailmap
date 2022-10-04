@@ -69,6 +69,30 @@ module Mailmap
       [proper_name, proper_email]
     end
 
+    # Return true if the name is defined as either of proper or commit name, otherwise false.
+    # The comparison is case-insensitive.
+    #
+    # @param name [String] the name
+    # @return [Boolean]
+    def include_name?(name)
+      name = name.downcase
+      any? do |(proper_name, _proper_email, commit_name, _commit_email)|
+        proper_name.downcase == name || commit_name == name
+      end
+    end
+
+    # Return true if the email is defined as either of proper or commit email, otherwise false.
+    # The comparison is case-insensitive.
+    #
+    # @param email [String] the email
+    # @return [Boolean]
+    def include_email?(email)
+      email = email.downcase
+      any? do |(_proper_name, proper_email, _commit_name, commit_email)|
+        proper_email.downcase == email || commit_email == email
+      end
+    end
+
     private
 
     def parse(string)
