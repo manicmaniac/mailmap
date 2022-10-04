@@ -49,7 +49,7 @@ module Mailmap
     # @param commit_email [String] the name in commit
     # @return [Array<String>] if found, a pair of proper name and email or nil
     # @return [nil] if not found
-    def find(commit_name_or_nil, commit_email)
+    def lookup(commit_name_or_nil, commit_email)
       commit_name = commit_name_or_nil&.downcase
       commit_email = commit_email.downcase
       hash = @map[commit_email]
@@ -59,12 +59,12 @@ module Mailmap
     # Like `git-check-mailmap` command, look up the person's canonical name and email address.
     # If found, return them; otherwise return the input as-is.
     #
-    # @param commit_name [String] the name in commit
+    # @param commit_name_or_nil [String, nil] the name in commit or nil
     # @param commit_email [String] the email in commit
     # @return [Array<String>] a pair of proper name and email
-    def resolve(commit_name, commit_email)
-      proper_name, proper_email = find(commit_name, commit_email)
-      proper_name ||= commit_name
+    def resolve(commit_name_or_nil, commit_email)
+      proper_name, proper_email = lookup(commit_name_or_nil, commit_email)
+      proper_name ||= commit_name_or_nil
       proper_email ||= commit_email
       [proper_name, proper_email]
     end

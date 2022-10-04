@@ -35,25 +35,32 @@ module Mailmap
       assert_equal(3, mailmap.count)
     end
 
-    def test_find_without_commit_name
+    def test_lookup_without_commit_name
       mailmap = Map.parse(<<~MAILMAP)
         Proper Name <commit@email.xx>
       MAILMAP
-      assert_equal(['Proper Name', nil], mailmap.find(nil, 'commit@email.xx'))
+      assert_equal(['Proper Name', nil], mailmap.lookup(nil, 'commit@email.xx'))
     end
 
-    def test_find_with_commit_name
+    def test_lookup_with_commit_name
       mailmap = Map.parse(<<~MAILMAP)
         Proper Name <proper@email.xx> Commit Name <commit@email.xx>
       MAILMAP
-      assert_equal(['Proper Name', 'proper@email.xx'], mailmap.find('Commit Name', 'commit@email.xx'))
+      assert_equal(['Proper Name', 'proper@email.xx'], mailmap.lookup('Commit Name', 'commit@email.xx'))
     end
 
-    def test_find_with_nonexistent_commit_email
+    def test_lookup_with_proper_email
       mailmap = Map.parse(<<~MAILMAP)
         Proper Name <proper@email.xx> Commit Name <commit@email.xx>
       MAILMAP
-      assert_nil(mailmap.find(nil, 'nonexistent@email.xx'))
+      assert_nil(mailmap.lookup(nil, 'proper@email.xx'))
+    end
+
+    def test_lookup_with_nonexistent_commit_email
+      mailmap = Map.parse(<<~MAILMAP)
+        Proper Name <proper@email.xx> Commit Name <commit@email.xx>
+      MAILMAP
+      assert_nil(mailmap.lookup(nil, 'nonexistent@email.xx'))
     end
 
     def test_resolve
@@ -63,11 +70,24 @@ module Mailmap
       assert_equal(['Proper Name', 'commit@email.xx'], mailmap.resolve('Commit Name', 'commit@email.xx'))
     end
 
+    def test_resolve_without_name
+      mailmap = Map.parse(<<~MAILMAP)
+        <proper@email.xx> <commit@email.xx>
+      MAILMAP
+      assert_equal([nil, 'proper@email.xx'], mailmap.resolve(nil, 'commit@email.xx'))
+    end
+
     def test_resolve_with_empty_mailmap
       mailmap = Map.parse('')
       assert_equal(['Commit Name', 'commit@email.xx'], mailmap.resolve('Commit Name', 'commit@email.xx'))
     end
 
+    def test_resolve_with_nonexistent_commit_email
+      mailmap = Map.parse(<<~MAILMAP)
+        Proper Name <proper@email.xx> Commit Name <commit@email.xx>
+      MAILMAP
+      assert_equal([nil, 'nonexistent@email.xx'], mailmap.resolve(nil, 'nonexistent@email.xx'))
+    end
     def test_parse_with_empty
       mailmap = Map.parse('')
       assert_empty(mailmap.instance_variable_get(:@map))
