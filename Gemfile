@@ -9,3 +9,4 @@ gem 'rake', '~> 13.0'
 gem 'rubocop', '~> 1.7'
 gem 'rubocop-minitest'
 gem 'rubocop-rake'
+gem 'simplecov', require: false
