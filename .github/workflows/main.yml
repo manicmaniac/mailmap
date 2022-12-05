@@ -1,16 +1,21 @@
 name: Ruby
-
-on: [push,pull_request]
-
+on: push
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version:
+        - 2.6.8
+        - 2.7.5
+        - 3.0.4
+        - 3.1.2
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.6.8
+        ruby-version: ${{ matrix.ruby-version }}
         bundler-cache: true
-    - name: Run the default task
-      run: bundle exec rake
+    - run: bundle exec rake
