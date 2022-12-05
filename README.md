@@ -3,6 +3,7 @@
 [![Test](https://github.com/manicmaniac/mailmap/actions/workflows/main.yml/badge.svg)](https://github.com/manicmaniac/mailmap/actions/workflows/main.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/d43e7ca25cb834a37a99/maintainability)](https://codeclimate.com/github/manicmaniac/mailmap/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/d43e7ca25cb834a37a99/test_coverage)](https://codeclimate.com/github/manicmaniac/mailmap/test_coverage)
+[![Gem Version](https://badge.fury.io/rb/mailmap.svg)](https://rubygems.org/gems/mailmap)
 
 Pure Ruby implementation of [Git mailmap](https://git-scm.com/docs/gitmailmap).
 
