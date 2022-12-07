@@ -77,7 +77,7 @@ module Mailmap
     def include_name?(name)
       name = name.downcase
       any? do |(proper_name, _proper_email, commit_name, _commit_email)|
-        proper_name.downcase == name || commit_name == name
+        proper_name&.downcase == name || commit_name == name
       end
     end
 
@@ -89,7 +89,7 @@ module Mailmap
     def include_email?(email)
       email = email.downcase
       any? do |(_proper_name, proper_email, _commit_name, commit_email)|
-        proper_email.downcase == email || commit_email == email
+        proper_email&.downcase == email || commit_email == email
       end
     end
 
