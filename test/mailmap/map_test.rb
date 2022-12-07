@@ -112,6 +112,14 @@ module Mailmap
       assert(mailmap.include_name?('commit name'))
     end
 
+    def test_include_name_without_names
+      mailmap = Map.parse(<<~MAILMAP)
+        <proper@email.xx> <commit@email.xx>
+      MAILMAP
+      refute(mailmap.include_name?('proper name'))
+      refute(mailmap.include_name?('commit name'))
+    end
+
     def test_include_email
       mailmap = Map.parse(<<~MAILMAP)
         Proper Name <proper@email.xx> Commit Name <commit@email.xx>
@@ -133,6 +141,14 @@ module Mailmap
       MAILMAP
       assert(mailmap.include_email?('Proper@email.xx'))
       assert(mailmap.include_email?('Commit@email.xx'))
+    end
+
+    def test_include_email_without_proper_email
+      mailmap = Map.parse(<<~MAILMAP)
+        Proper Name <commit@email.xx>
+      MAILMAP
+      refute(mailmap.include_email?('proper@email.xx'))
+      assert(mailmap.include_email?('commit@email.xx'))
     end
 
     def test_parse_with_empty
