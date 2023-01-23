@@ -10,6 +10,7 @@ module Mailmap
         f.write(<<~MAILMAP)
           Proper Name <commit@email.xx>
         MAILMAP
+
         assert_kind_of(Map, Map.load(f.path))
       end
     end
@@ -21,6 +22,7 @@ module Mailmap
         Jane Doe <jane@example.com> <jane@desktop.(none)>
       MAILMAP
       enumerator = mailmap.each
+
       assert_equal(['Joe R. Developer', nil, nil, 'joe@example.com'], enumerator.next)
       assert_equal(['Jane Doe', 'jane@example.com', nil, 'jane@laptop.(none)'], enumerator.next)
       assert_equal(['Jane Doe', 'jane@example.com', nil, 'jane@desktop.(none)'], enumerator.next)
@@ -79,6 +81,7 @@ module Mailmap
 
     def test_resolve_with_empty_mailmap
       mailmap = Map.parse('')
+
       assert_equal(['Commit Name', 'commit@email.xx'], mailmap.resolve('Commit Name', 'commit@email.xx'))
     end
 
@@ -153,6 +156,7 @@ module Mailmap
 
     def test_parse_with_empty
       mailmap = Map.parse('')
+
       assert_empty(mailmap.instance_variable_get(:@map))
     end
 
@@ -178,6 +182,7 @@ module Mailmap
           nil => ['Proper Name', nil]
         }
       }
+
       assert_equal(expected, mailmap.instance_variable_get(:@map))
     end
 
@@ -190,6 +195,7 @@ module Mailmap
           nil => [nil, 'proper@email.xx']
         }
       }
+
       assert_equal(expected, mailmap.instance_variable_get(:@map))
     end
 
@@ -202,6 +208,7 @@ module Mailmap
           nil => ['Proper Name', 'proper@email.xx']
         }
       }
+
       assert_equal(expected, mailmap.instance_variable_get(:@map))
     end
 
@@ -214,6 +221,7 @@ module Mailmap
           'commit name' => ['Proper Name', 'proper@email.xx']
         }
       }
+
       assert_equal(expected, mailmap.instance_variable_get(:@map))
     end
   end
