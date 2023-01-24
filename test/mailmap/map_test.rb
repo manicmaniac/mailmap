@@ -15,7 +15,16 @@ module Mailmap
       end
     end
 
-    def test_each
+    def test_each_with_block_returns_self
+      mailmap = Map.parse('')
+      result = mailmap.each do
+        # Do nothing
+      end
+
+      assert_equal(result, mailmap)
+    end
+
+    def test_each_without_block_returns_enumerator
       mailmap = Map.parse(<<~MAILMAP)
         Joe R. Developer <joe@example.com>
         Jane Doe <jane@example.com> <jane@laptop.(none)>
@@ -26,6 +35,14 @@ module Mailmap
       assert_equal(['Joe R. Developer', nil, nil, 'joe@example.com'], enumerator.next)
       assert_equal(['Jane Doe', 'jane@example.com', nil, 'jane@laptop.(none)'], enumerator.next)
       assert_equal(['Jane Doe', 'jane@example.com', nil, 'jane@desktop.(none)'], enumerator.next)
+    end
+
+    def test_each_when_empty
+      mailmap = Map.parse('')
+      enumerator = mailmap.each
+
+      assert_instance_of(Enumerator, enumerator)
+      assert_raises(StopIteration) { enumerator.next }
     end
 
     def test_count
