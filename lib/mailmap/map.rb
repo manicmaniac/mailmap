@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'forwardable'
 require 'strscan'
 
 module Mailmap
@@ -10,9 +9,7 @@ module Mailmap
 
   # A Map represents a .mailmap file.
   class Map
-    extend Forwardable
-
-    def_delegators :each, *Enumerable.instance_methods(false)
+    include Enumerable
 
     class << self
       # Load a mailmap file and return Map object.
