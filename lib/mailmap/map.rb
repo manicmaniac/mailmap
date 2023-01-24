@@ -40,6 +40,7 @@ module Mailmap
           yield [proper_name, proper_email, commit_name, commit_email]
         end
       end
+      self
     end
 
     # Look up the person's canonical name and email address.
