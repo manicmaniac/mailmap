@@ -34,7 +34,7 @@ module Mailmap
 
       @map.each do |commit_email, entries_by_commit_name|
         entries_by_commit_name.each do |commit_name, (proper_name, proper_email)|
-          yield [proper_name, proper_email, commit_name, commit_email]
+          yield proper_name, proper_email, commit_name, commit_email
         end
       end
       self
@@ -74,7 +74,7 @@ module Mailmap
     # @return [Boolean]
     def include_name?(name)
       name = name.downcase
-      any? do |(proper_name, _proper_email, commit_name, _commit_email)|
+      any? do |proper_name, _proper_email, commit_name, _commit_email|
         proper_name&.downcase == name || commit_name == name
       end
     end
@@ -86,7 +86,7 @@ module Mailmap
     # @return [Boolean]
     def include_email?(email)
       email = email.downcase
-      any? do |(_proper_name, proper_email, _commit_name, commit_email)|
+      any? do |_proper_name, proper_email, _commit_name, commit_email|
         proper_email&.downcase == email || commit_email == email
       end
     end
