@@ -25,6 +25,7 @@ module Mailmap
 
     # @param string [String] the string in .mailmap format
     def initialize(string)
+      # @type ivar @map: Hash[String, Hash[String?, String?]]
       @map = Hash.new { |h, k| h[k] = {} }
       parse(string)
     end
@@ -102,7 +103,9 @@ module Mailmap
     end
 
     def parse_name_and_email(line, line_number) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      # @type var names: Array[String]
       names = []
+      # @type var emails: Array[String]
       emails = []
       scanner = StringScanner.new(line)
       2.times do
@@ -112,9 +115,9 @@ module Mailmap
         scanner.scan(/[^>]+/).then { |s| emails << s if s }
         scanner.skip(/>/)
       end
-      raise ParserError, "Missing commit email at line #{line_number}" if emails.empty?
-
       commit_email = emails.pop&.downcase
+      raise ParserError, "Missing commit email at line #{line_number}" unless commit_email
+
       proper_email = emails.pop
       proper_name = names.shift
       commit_name = names.shift&.downcase
