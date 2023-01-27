@@ -10,6 +10,11 @@ Rake::TestTask.new(:test) do |t|
   t.test_files = FileList['test/**/*_test.rb']
 end
 
+desc 'Run static type checker'
+task :steep do
+  sh 'steep check'
+end
+
 RuboCop::RakeTask.new
 
-task default: %i[test rubocop]
+task default: %i[steep test rubocop]
