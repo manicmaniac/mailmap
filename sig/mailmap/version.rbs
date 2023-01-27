@@ -1,3 +1,0 @@
-module Mailmap
-  VERSION: String
-end
