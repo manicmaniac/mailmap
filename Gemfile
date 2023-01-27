@@ -10,3 +10,5 @@ gem 'rubocop', '~> 1.7', require: false
 gem 'rubocop-minitest', require: false
 gem 'rubocop-rake', require: false
 gem 'simplecov', require: false
+gem 'steep', require: false
+gem 'yard', require: false
