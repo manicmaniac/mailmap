@@ -1,0 +1,26 @@
+# TypeProf 0.21.2
+
+# Classes
+module Mailmap
+  class ParserError < StandardError
+  end
+
+  class Map
+    include Enumerable[[String?, String?, String?, String]]
+    @map: Hash[String, Hash[String?, [String?, String?]]]
+
+    def self.load: (String path) -> Map
+    alias self.parse self.new
+    def initialize: (String string) -> void
+    def each: ?{ (String?, String?, String?, String) -> void } -> (Enumerator[[String?, String?, String?, String], void] | Map)
+    def lookup: (String? commit_name_or_nil, String commit_email) -> [String?, String?]?
+    def resolve: (String commit_name_or_nil, String commit_email) -> [String, String]
+               | (nil commit_name_or_nil, String commit_email) -> [String?, String]
+    def include_name?: (String name) -> bool
+    def include_email?: (String email) -> bool
+
+    private
+    def parse: (String string) -> void
+    def parse_name_and_email: (String line, Integer line_number) -> void
+  end
+end

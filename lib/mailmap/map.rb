@@ -25,6 +25,7 @@ module Mailmap
 
     # @param string [String] the string in .mailmap format
     def initialize(string)
+      # @type ivar @map: Hash[String, Hash[String?, String?]]
       @map = Hash.new { |h, k| h[k] = {} }
       parse(string)
     end
@@ -45,7 +46,9 @@ module Mailmap
     #
     # @param commit_name_or_nil [String, nil] the name in commit or nil
     # @param commit_email [String] the name in commit
-    # @return [Array<String>] if found, a pair of proper name and email or nil
+    # @return [(String, String)] if found, a pair of proper name and email
+    # @return [(String, nil)] if only proper name is found
+    # @return [(nil, String)] if only proper email is found
     # @return [nil] if not found
     def lookup(commit_name_or_nil, commit_email)
       commit_name = commit_name_or_nil&.downcase
@@ -54,12 +57,13 @@ module Mailmap
       hash[commit_name] || hash[nil]
     end
 
-    # Like `git-check-mailmap` command, look up the person's canonical name and email address.
+    # Like +git-check-mailmap+ command, look up the person's canonical name and email address.
     # If found, return them; otherwise return the input as-is.
     #
     # @param commit_name_or_nil [String, nil] the name in commit or nil
     # @param commit_email [String] the email in commit
-    # @return [Array<String>] a pair of proper name and email
+    # @return [(String, String)] a pair of proper name and email
+    # @return [(nil, String)] if proper name is not found and +commit_name+ is not provided
     def resolve(commit_name_or_nil, commit_email)
       proper_name, proper_email = lookup(commit_name_or_nil, commit_email)
       proper_name ||= commit_name_or_nil
@@ -102,7 +106,9 @@ module Mailmap
     end
 
     def parse_name_and_email(line, line_number) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      # @type var names: Array[String]
       names = []
+      # @type var emails: Array[String]
       emails = []
       scanner = StringScanner.new(line)
       2.times do
@@ -112,9 +118,9 @@ module Mailmap
         scanner.scan(/[^>]+/).then { |s| emails << s if s }
         scanner.skip(/>/)
       end
-      raise ParserError, "Missing commit email at line #{line_number}" if emails.empty?
-
       commit_email = emails.pop&.downcase
+      raise ParserError, "Missing commit email at line #{line_number}" unless commit_email
+
       proper_email = emails.pop
       proper_name = names.shift
       commit_name = names.shift&.downcase
