@@ -44,6 +44,8 @@ mailmap.resolve(nil, 'commit@example.com') # => [nil, 'proper@example.com']
 mailmap.lookup('Nonexistent Name', 'nonexistent@example.com') #=> nil
 ```
 
+See [API reference](https://www.rubydoc.info/gems/mailmap) for more information.
+
 ## Development
 
 After checking out the repo, run `bundle install` to install dependencies. Then, run `rake test` to run the tests.
