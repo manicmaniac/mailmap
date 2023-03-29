@@ -89,8 +89,7 @@ GEM
     zeitwerk (2.6.7)
 
 PLATFORMS
-  universal-darwin-21
-  x86_64-linux
+  ruby
 
 DEPENDENCIES
   mailmap!
