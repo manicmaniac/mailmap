@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mailmap (0.2.0)
+    mailmap (0.3.0)
 
 GEM
   remote: https://rubygems.org/
