@@ -17,11 +17,11 @@ gem 'mailmap'
 
 And then execute:
 
-    $ bundle install
+  bundle install
 
 Or install it yourself as:
 
-    $ gem install mailmap
+  gem install mailmap
 
 ## Usage
 
