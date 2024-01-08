@@ -4,7 +4,6 @@
     "config:base"
   ],
   "platformAutomerge": true,
-  "rangeStrategy": "update-lockfile",
   "packageRules": [
     {
       "matchUpdateTypes": [
