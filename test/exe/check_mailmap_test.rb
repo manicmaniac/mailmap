@@ -18,6 +18,10 @@ class CheckMailmapTest < Minitest::Test
     super
   end
 
+  def test_executable
+    assert(File.executable?(EXECUTABLE_PATH))
+  end
+
   def test_help
     stdout, stderr, status = check_mailmap('--help')
 
