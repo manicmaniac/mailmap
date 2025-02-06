@@ -8,6 +8,16 @@ require 'test_helper'
 class CheckMailmapTest < Minitest::Test
   parallelize_me!
 
+  def run(*args, **kwargs, &block)
+    @git_dir = Dir.mktmpdir
+    Minitest.after_run do
+      FileUtils.remove_dir(@git_dir)
+      @git_dir = nil
+    end
+    git_init(@git_dir)
+    super
+  end
+
   def test_help
     stdout, stderr, status = check_mailmap('--help')
 
@@ -43,19 +53,16 @@ class CheckMailmapTest < Minitest::Test
   }
 
   Enumerator.product(mailmap_patterns, contact_patterns) do |(mailmap_key, mailmap_value), (contact_key, contact_value)|
-    define_method("test_compatibility_on_#{mailmap_key}_with_#{contact_key}") do # rubocop:disable Metrics/MethodLength
-      Dir.mktmpdir do |tmpdir|
-        git_init(tmpdir)
-        Tempfile.create('mailmap', tmpdir) do |mailmap|
-          mailmap.write(mailmap_value)
+    define_method("test_compatibility_on_#{mailmap_key}_with_#{contact_key}") do
+      Tempfile.create('mailmap', @git_dir) do |mailmap|
+        mailmap.write(mailmap_value)
 
-          expected = git_check_mailmap(contact_value, cwd: tmpdir, mailmap_path: mailmap.path)
-          actual = check_mailmap(contact_value, mailmap_path: mailmap.path)
+        expected = git_check_mailmap(contact_value, mailmap_path: mailmap.path)
+        actual = check_mailmap(contact_value, mailmap_path: mailmap.path)
 
-          assert_equal(expected[0], actual[0]) # stdout
-          assert_equal(expected[1], actual[1]) # stderr
-          assert_equal(expected[2].exitstatus, actual[2].exitstatus) # status
-        end
+        assert_equal(expected[0], actual[0]) # stdout
+        assert_equal(expected[1], actual[1]) # stderr
+        assert_equal(expected[2].exitstatus, actual[2].exitstatus) # status
       end
     end
   end
@@ -75,10 +82,11 @@ class CheckMailmapTest < Minitest::Test
   end
 
   def check_mailmap(*args, mailmap_path: '', stdin_data: nil)
-    Open3.capture3(RbConfig.ruby, '-r', SIMPLECOV_SPAWN_PATH, EXECUTABLE_PATH, '-f', mailmap_path, *args, stdin_data: stdin_data)
+    Open3.capture3(RbConfig.ruby, '-r', SIMPLECOV_SPAWN_PATH, EXECUTABLE_PATH, '-f', mailmap_path, *args,
+                   stdin_data: stdin_data)
   end
 
-  def git_check_mailmap(*args, cwd: Dir.pwd, mailmap_path: '')
-    Open3.capture3('git', '-C', cwd, '-c', "mailmap.file=#{mailmap_path}", 'check-mailmap', *args)
+  def git_check_mailmap(*args, mailmap_path: '')
+    Open3.capture3('git', '-C', @git_dir, '-c', "mailmap.file=#{mailmap_path}", 'check-mailmap', *args)
   end
 end
