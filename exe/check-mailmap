@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
+
+require 'mailmap'
+require 'optparse'
+
+# An error raised when a contact cannot be parsed.
+class ContactParseError < StandardError
+  def initialize(contact)
+    super("fatal: unable to parse contact: #{contact}")
+  end
+end
+
+mailmap_path = '.mailmap'
+parser = OptionParser.new do |opts|
+  opts.banner = 'usage: check-mailmap [<options>] <contact>...'
+  opts.version = Mailmap::VERSION
+
+  opts.on('-f FILE', '--file=FILE', 'path to the .mailmap file (default: ./.mailmap)') do |file|
+    mailmap_path = file
+  end
+
+  opts.on('--stdin', 'also read contacts from stdin') do
+    ARGV.concat($stdin.readlines(chomp: true))
+  end
+end
+parser.parse!
+abort(parser.help) if ARGV.empty?
+
+begin
+  ARGV.each do |contact|
+    matched = contact.match(/^(?<name>.*?)?<(?<email>.+?)>$/)
+    raise ContactParseError, contact unless matched
+
+    commit_name_or_nil = matched[:name].strip
+    commit_email = matched[:email]
+    proper_name, proper_email = Mailmap::Map.load(mailmap_path).resolve(commit_name_or_nil, commit_email)
+    puts "#{proper_name} <#{proper_email}>".strip
+  end
+rescue ContactParseError => e
+  warn(e.message)
+  exit(128)
+rescue StandardError => e
+  abort("fatal: #{e.message}")
+end
