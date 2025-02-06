@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'fileutils'
 require 'open3'
 require 'tempfile'
 require 'test_helper'
@@ -44,7 +45,7 @@ class CheckMailmapTest < Minitest::Test
   Enumerator.product(mailmap_patterns, contact_patterns) do |(mailmap_key, mailmap_value), (contact_key, contact_value)|
     define_method("test_compatibility_on_#{mailmap_key}_with_#{contact_key}") do # rubocop:disable Metrics/MethodLength
       Dir.mktmpdir do |tmpdir|
-        system('git', '-C', tmpdir, 'init', '--quiet', exception: true)
+        git_init(tmpdir)
         Tempfile.create('mailmap', tmpdir) do |mailmap|
           File.write(File.join(tmpdir, '.git', 'config'), "[mailmap]\n\tfile = #{mailmap.path}\n", mode: 'a')
           mailmap.write(mailmap_value)
@@ -67,6 +68,12 @@ class CheckMailmapTest < Minitest::Test
 
   SIMPLECOV_SPAWN_PATH = File.expand_path('../simplecov_spawn.rb', __dir__)
   private_constant :SIMPLECOV_SPAWN_PATH
+
+  def git_init(dir)
+    git_dir = File.join(dir, '.git')
+    FileUtils.makedirs([File.join(git_dir, 'objects'), File.join(git_dir, 'refs')])
+    File.write(File.join(git_dir, 'HEAD'), 'ref: refs/heads/main')
+  end
 
   def check_mailmap(*args, stdin_data: nil)
     Open3.capture3(RbConfig.ruby, '-r', SIMPLECOV_SPAWN_PATH, EXECUTABLE_PATH, *args, stdin_data: stdin_data)
