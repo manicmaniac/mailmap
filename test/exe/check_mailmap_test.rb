@@ -47,11 +47,10 @@ class CheckMailmapTest < Minitest::Test
       Dir.mktmpdir do |tmpdir|
         git_init(tmpdir)
         Tempfile.create('mailmap', tmpdir) do |mailmap|
-          File.write(File.join(tmpdir, '.git', 'config'), "[mailmap]\n\tfile = #{mailmap.path}\n", mode: 'a')
           mailmap.write(mailmap_value)
 
-          expected = git_check_mailmap(contact_value, cwd: tmpdir)
-          actual = check_mailmap('-f', mailmap.path, contact_value)
+          expected = git_check_mailmap(contact_value, cwd: tmpdir, mailmap_path: mailmap.path)
+          actual = check_mailmap(contact_value, mailmap_path: mailmap.path)
 
           assert_equal(expected[0], actual[0]) # stdout
           assert_equal(expected[1], actual[1]) # stderr
@@ -75,11 +74,11 @@ class CheckMailmapTest < Minitest::Test
     File.write(File.join(git_dir, 'HEAD'), 'ref: refs/heads/main')
   end
 
-  def check_mailmap(*args, stdin_data: nil)
-    Open3.capture3(RbConfig.ruby, '-r', SIMPLECOV_SPAWN_PATH, EXECUTABLE_PATH, *args, stdin_data: stdin_data)
+  def check_mailmap(*args, mailmap_path: '', stdin_data: nil)
+    Open3.capture3(RbConfig.ruby, '-r', SIMPLECOV_SPAWN_PATH, EXECUTABLE_PATH, '-f', mailmap_path, *args, stdin_data: stdin_data)
   end
 
-  def git_check_mailmap(*args, cwd: Dir.pwd)
-    Open3.capture3('git', '-C', cwd, 'check-mailmap', *args)
+  def git_check_mailmap(*args, cwd: Dir.pwd, mailmap_path: '')
+    Open3.capture3('git', '-C', cwd, '-c', "mailmap.file=#{mailmap_path}", 'check-mailmap', *args)
   end
 end
