@@ -5,8 +5,6 @@ require 'tempfile'
 require 'test_helper'
 
 class CheckMailmapTest < Minitest::Test
-  EXECUTABLE_PATH = File.expand_path('../../exe/check-mailmap', __dir__)
-
   parallelize_me!
 
   def test_help
@@ -64,8 +62,14 @@ class CheckMailmapTest < Minitest::Test
 
   private
 
+  EXECUTABLE_PATH = File.expand_path('../../exe/check-mailmap', __dir__)
+  private_constant :EXECUTABLE_PATH
+
+  SIMPLECOV_SPAWN_PATH = File.expand_path('../simplecov_spawn.rb', __dir__)
+  private_constant :SIMPLECOV_SPAWN_PATH
+
   def check_mailmap(*args, stdin_data: nil)
-    Open3.capture3(EXECUTABLE_PATH, *args, stdin_data: stdin_data)
+    Open3.capture3(RbConfig.ruby, '-r', SIMPLECOV_SPAWN_PATH, EXECUTABLE_PATH, *args, stdin_data: stdin_data)
   end
 
   def git_check_mailmap(*args, cwd: Dir.pwd)
