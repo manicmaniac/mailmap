@@ -36,6 +36,17 @@ class CheckMailmapTest < Minitest::Test
     assert_match(/^check-mailmap \d+[.]\d+[.]\d+\n$/, stdout)
   end
 
+  def test_stdin
+    stdout, stderr, status = Tempfile.create do |mailmap|
+      mailmap.write("Proper Name <commit@email.xx>\n")
+      mailmap.close
+      check_mailmap('--stdin', mailmap_path: mailmap.path, stdin_data: '<commit@email.xx>')
+    end
+    assert_equal("Proper Name <commit@email.xx>\n", stdout)
+    assert_empty(stderr)
+    assert_predicate(status, :success?)
+  end
+
   mailmap_patterns = {
     name_email: "Proper Name <commit@email.xx>\n",
     email_email: "<proper@email.xx> <commit@email.xx>\n",
@@ -90,7 +101,8 @@ class CheckMailmapTest < Minitest::Test
                    stdin_data: stdin_data)
   end
 
-  def git_check_mailmap(*args, mailmap_path: '')
-    Open3.capture3('git', '-C', @git_dir, '-c', "mailmap.file=#{mailmap_path}", 'check-mailmap', *args)
+  def git_check_mailmap(*args, mailmap_path: '', stdin_data: nil)
+    Open3.capture3('git', '-C', @git_dir, '-c', "mailmap.file=#{mailmap_path}", 'check-mailmap', *args,
+                   stdin_data: stdin_data)
   end
 end
