@@ -117,6 +117,7 @@ module Mailmap
         scanner.skip(/</)
         scanner.scan(/[^>]+/).then { |s| emails << s if s }
         scanner.skip(/>/)
+        scanner.skip(/\s*#.*$/)
       end
       commit_email = emails.pop&.downcase
       raise ParserError, "Missing commit email at line #{line_number}" unless commit_email
