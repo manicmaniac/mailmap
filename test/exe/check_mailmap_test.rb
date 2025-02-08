@@ -39,7 +39,7 @@ class CheckMailmapTest < Minitest::Test
   def test_stdin
     stdout, stderr, status = Tempfile.create do |mailmap|
       mailmap.write("Proper Name <commit@email.xx>\n")
-      mailmap.close
+      mailmap.rewind
       check_mailmap('--stdin', mailmap_path: mailmap.path, stdin_data: '<commit@email.xx>')
     end
 
@@ -73,7 +73,7 @@ class CheckMailmapTest < Minitest::Test
       define_method("test_compatibility_on_#{mailmap_key}_with_#{contact_key}") do
         Tempfile.create('mailmap', @git_dir) do |mailmap|
           mailmap.write(mailmap_value)
-          mailmap.close
+          mailmap.rewind
 
           expected = git_check_mailmap(contact_value, mailmap_path: mailmap.path)
           actual = check_mailmap(contact_value, mailmap_path: mailmap.path)
