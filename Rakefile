@@ -3,6 +3,7 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 require 'rubocop/rake_task'
+require 'steep/rake_task'
 
 Rake::TestTask.new(:test) do |t|
   t.libs << 'test'
@@ -10,12 +11,8 @@ Rake::TestTask.new(:test) do |t|
   t.test_files = FileList['test/**/*_test.rb']
 end
 
-desc 'Run static type checker'
-task :steep do
-  sh 'steep check'
-end
-
 RuboCop::RakeTask.new
+Steep::RakeTask.new
 
 task default: %i[steep test rubocop]
 
