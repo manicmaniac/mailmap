@@ -10,8 +10,7 @@ target :exe do
 end
 
 target :lib do
-  signature 'sig'
-  ignore_signature 'sig/test'
+  signature 'sig/lib'
   library 'strscan'
 
   check 'lib'
