@@ -122,23 +122,21 @@ module Mailmap
       tokens
     end
 
-    def parse_name_and_email(tokens, line_number) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-      case tokens.map(&:first)
-      when %i[name email]
-        proper_name, commit_email = tokens.map(&:last)
-      when %i[email email]
-        proper_email, commit_email = tokens.map(&:last)
-      when %i[name email email]
-        proper_name, proper_email, commit_email = tokens.map(&:last)
-      when %i[email name email]
-        proper_email, commit_name, commit_email = tokens.map(&:last)
-      when %i[name email name email]
-        proper_name, proper_email, commit_name, commit_email = tokens.map(&:last)
-      else
-        raise ParserError, "Invalid format at line #{line_number}"
-      end
-      abort unless commit_email
-      [proper_name, proper_email, commit_name, commit_email]
+    PATTERNS = {
+      %i[name email] => %i[proper_name commit_email],
+      %i[email email] => %i[proper_email commit_email],
+      %i[name email email] => %i[proper_name proper_email commit_email],
+      %i[email name email] => %i[proper_email commit_name commit_email],
+      %i[name email name email] => %i[proper_name proper_email commit_name commit_email]
+    }.freeze
+    private_constant :PATTERNS
+
+    def parse_name_and_email(tokens, line_number)
+      types = tokens.map(&:first)
+      values = tokens.map(&:last)
+      fields = PATTERNS[types] or raise ParserError, "Invalid format at line #{line_number}"
+      entry = fields.zip(values).to_h
+      [entry[:proper_name], entry[:proper_email], entry[:commit_name], entry.fetch(:commit_email)]
     end
   end
 end
