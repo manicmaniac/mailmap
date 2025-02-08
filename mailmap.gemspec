@@ -18,6 +18,7 @@ Gem::Specification.new do |spec|
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
 
+  spec.executables = ['check-mailmap']
   spec.files = Dir['lib/**/*.rb']
   spec.require_paths = ['lib']
 end

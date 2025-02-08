@@ -101,30 +101,42 @@ module Mailmap
       string.each_line.with_index(1) do |line, line_number|
         next if line.start_with?('#')
 
-        parse_name_and_email(line, line_number)
+        tokens = tokenize_name_and_email(line)
+        proper_name, proper_email, commit_name, commit_email = parse_name_and_email(tokens, line_number)
+        @map[commit_email.downcase][commit_name&.downcase] = [proper_name, proper_email]
       end
     end
 
-    def parse_name_and_email(line, line_number) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      # @type var names: Array[String]
-      names = []
-      # @type var emails: Array[String]
-      emails = []
+    def tokenize_name_and_email(line) # rubocop:disable Metrics/MethodLength
+      # @type var tokens: Array[[Symbol, String]]
+      tokens = []
       scanner = StringScanner.new(line)
       2.times do
         scanner.skip(/\s+/)
-        scanner.scan(/[^<]+/).then { |s| names << s.rstrip if s }
+        scanner.scan(/[^<]+/)&.then { |s| tokens << [:name, s.rstrip] }
         scanner.skip(/</)
-        scanner.scan(/[^>]+/).then { |s| emails << s if s }
+        scanner.scan(/[^>]+/)&.then { |s| tokens << [:email, s] }
         scanner.skip(/>/)
+        scanner.skip(/\s*#.*$/)
       end
-      commit_email = emails.pop&.downcase
-      raise ParserError, "Missing commit email at line #{line_number}" unless commit_email
+      tokens
+    end
 
-      proper_email = emails.pop
-      proper_name = names.shift
-      commit_name = names.shift&.downcase
-      @map[commit_email][commit_name] = [proper_name, proper_email]
+    PATTERNS = {
+      %i[name email] => %i[proper_name commit_email],
+      %i[email email] => %i[proper_email commit_email],
+      %i[name email email] => %i[proper_name proper_email commit_email],
+      %i[email name email] => %i[proper_email commit_name commit_email],
+      %i[name email name email] => %i[proper_name proper_email commit_name commit_email]
+    }.freeze
+    private_constant :PATTERNS
+
+    def parse_name_and_email(tokens, line_number)
+      types = tokens.map(&:first)
+      values = tokens.map(&:last)
+      fields = PATTERNS[types] or raise ParserError, "Invalid format at line #{line_number}"
+      entry = fields.zip(values).to_h
+      [entry[:proper_name], entry[:proper_email], entry[:commit_name], entry.fetch(:commit_email)]
     end
   end
 end

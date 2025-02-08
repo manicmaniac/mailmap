@@ -203,6 +203,19 @@ module Mailmap
       assert_equal(expected, mailmap.instance_variable_get(:@map))
     end
 
+    def test_parse_with_trailing_comment
+      mailmap = Map.parse(<<~MAILMAP)
+        Proper Name <commit@email.xx> # Comment
+      MAILMAP
+      expected = {
+        'commit@email.xx' => {
+          nil => ['Proper Name', nil]
+        }
+      }
+
+      assert_equal(expected, mailmap.instance_variable_get(:@map))
+    end
+
     def test_parse_with_complex_entry_only_emails
       mailmap = Map.parse(<<~MAILMAP)
         <proper@email.xx> <commit@email.xx>

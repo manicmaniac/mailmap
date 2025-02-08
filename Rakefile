@@ -18,3 +18,24 @@ end
 RuboCop::RakeTask.new
 
 task default: %i[steep test rubocop]
+
+namespace :test do
+  desc 'Generate test cases'
+  task generate: ['test/exe/check_mailmap_compatibility_test.rb']
+end
+
+file 'test/exe/check_mailmap_compatibility_test.rb' => 'test/exe/check_mailmap_compatibility_test.erb' do |task|
+  require 'erb'
+  require 'rubocop'
+
+  erb = ERB.new(File.read(task.source), trim_mode: '-')
+  File.write(task.name, erb.result)
+  options = {
+    autocorrect: true,
+    display_only_fail_level_offenses: true,
+    formatters: [[RuboCop::Formatter::QuietFormatter, nil]],
+    only: ['Style/StringLiterals']
+  }
+  config_store = RuboCop::ConfigStore.new
+  exit(RuboCop::Runner.new(options, config_store).run([task.name]))
+end
