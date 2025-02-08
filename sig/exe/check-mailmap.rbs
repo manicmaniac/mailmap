@@ -1,0 +1,3 @@
+class ContactParseError < StandardError
+  def initialize: (String contact) -> void
+end
