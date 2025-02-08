@@ -1,0 +1,2 @@
+class MailmapTest < Minitest::Test
+end

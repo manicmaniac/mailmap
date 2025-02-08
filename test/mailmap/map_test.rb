@@ -11,7 +11,7 @@ module Mailmap
           Proper Name <commit@email.xx>
         MAILMAP
 
-        assert_kind_of(Map, Map.load(f.path))
+        assert_kind_of(Map, Map.load(f.path || abort))
       end
     end
 
@@ -30,7 +30,7 @@ module Mailmap
         Jane Doe <jane@example.com> <jane@laptop.(none)>
         Jane Doe <jane@example.com> <jane@desktop.(none)>
       MAILMAP
-      enumerator = mailmap.each
+      enumerator = mailmap.to_enum
 
       assert_equal(['Joe R. Developer', nil, nil, 'joe@example.com'], enumerator.next)
       assert_equal(['Jane Doe', 'jane@example.com', nil, 'jane@laptop.(none)'], enumerator.next)
@@ -39,7 +39,7 @@ module Mailmap
 
     def test_each_when_empty
       mailmap = Map.parse('')
-      enumerator = mailmap.each
+      enumerator = mailmap.to_enum
 
       assert_instance_of(Enumerator, enumerator)
       assert_raises(StopIteration) { enumerator.next }

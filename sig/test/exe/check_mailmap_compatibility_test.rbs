@@ -1,0 +1,3 @@
+class CheckMailmapCompatibilityTest < Minitest::Test
+  def check_mailmap: (*String args, ?mailmap_path: String) -> [String, String, Integer?]
+end
