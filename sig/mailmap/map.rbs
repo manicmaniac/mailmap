@@ -16,6 +16,7 @@ module Mailmap
     def lookup: (String? commit_name_or_nil, String commit_email) -> [String?, String?]?
     def resolve: (String commit_name_or_nil, String commit_email) -> [String, String]
                | (nil commit_name_or_nil, String commit_email) -> [String?, String]
+               | (String? commit_name_or_nil, String commit_email) -> [String?, String]
     def include_name?: (String name) -> bool
     def include_email?: (String email) -> bool
 
