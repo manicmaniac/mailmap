@@ -42,6 +42,7 @@ class CheckMailmapTest < Minitest::Test
       mailmap.close
       check_mailmap('--stdin', mailmap_path: mailmap.path, stdin_data: '<commit@email.xx>')
     end
+
     assert_equal("Proper Name <commit@email.xx>\n", stdout)
     assert_empty(stderr)
     assert_predicate(status, :success?)
@@ -52,12 +53,12 @@ class CheckMailmapTest < Minitest::Test
     email_email: "<proper@email.xx> <commit@email.xx>\n",
     name_email_email: "Proper Name <proper@email.xx> <commit@email.xx>\n",
     name_email_name_email: "Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n",
+    email_name_email: "<proper@email.xx> Commit Name <commit@email.xx>\n",
     comment: "# Comment\n",
     trailing_comment: "Proper Name <commit@email.xx> # Comment\n",
     invalid_name: "Commit Name\n",
     invalid_name_name: "Proper Name Commit Name\n",
-    invalid_email: "<commit@email.xx>\n",
-    invalid_email_name_email: "<proper@email.xx> Commit Name <commit@email.xx>\n"
+    invalid_email: "<commit@email.xx>\n"
   }
 
   contact_patterns = {

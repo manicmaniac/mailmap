@@ -36,8 +36,11 @@ begin
 
     commit_name_or_nil = matched[:name].strip
     commit_email = matched[:email]
-    proper_name, proper_email = Mailmap::Map.load(mailmap_path).resolve(commit_name_or_nil, commit_email)
+    mailmap = Mailmap::Map.load(mailmap_path)
+    proper_name, proper_email = mailmap.resolve(commit_name_or_nil, commit_email)
     puts "#{proper_name} <#{proper_email}>".strip
+  rescue Mailmap::ParserError
+    puts "#{commit_name_or_nil} <#{commit_email}>".strip
   end
 rescue ContactParseError => e
   warn(e.message)

@@ -101,31 +101,44 @@ module Mailmap
       string.each_line.with_index(1) do |line, line_number|
         next if line.start_with?('#')
 
-        parse_name_and_email(line, line_number)
+        tokens = tokenize_name_and_email(line)
+        proper_name, proper_email, commit_name, commit_email = parse_name_and_email(tokens, line_number)
+        @map[commit_email.downcase][commit_name&.downcase] = [proper_name, proper_email]
       end
     end
 
-    def parse_name_and_email(line, line_number) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
-      # @type var names: Array[String]
-      names = []
-      # @type var emails: Array[String]
-      emails = []
+    def tokenize_name_and_email(line) # rubocop:disable Metrics/MethodLength
+      # @type var tokens: Array[[Symbol, String]]
+      tokens = []
       scanner = StringScanner.new(line)
       2.times do
         scanner.skip(/\s+/)
-        scanner.scan(/[^<]+/).then { |s| names << s.rstrip if s }
+        scanner.scan(/[^<]+/).then { |s| tokens << [:name, s.rstrip] if s }
         scanner.skip(/</)
-        scanner.scan(/[^>]+/).then { |s| emails << s if s }
+        scanner.scan(/[^>]+/).then { |s| tokens << [:email, s] if s }
         scanner.skip(/>/)
         scanner.skip(/\s*#.*$/)
       end
-      commit_email = emails.pop&.downcase
-      raise ParserError, "Missing commit email at line #{line_number}" unless commit_email
+      tokens
+    end
 
-      proper_email = emails.pop
-      proper_name = names.shift
-      commit_name = names.shift&.downcase
-      @map[commit_email][commit_name] = [proper_name, proper_email]
+    def parse_name_and_email(tokens, line_number) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+      case tokens.map(&:first)
+      when %i[name email]
+        proper_name, commit_email = tokens.map(&:last)
+      when %i[email email]
+        proper_email, commit_email = tokens.map(&:last)
+      when %i[name email email]
+        proper_name, proper_email, commit_email = tokens.map(&:last)
+      when %i[email name email]
+        proper_email, commit_name, commit_email = tokens.map(&:last)
+      when %i[name email name email]
+        proper_name, proper_email, commit_name, commit_email = tokens.map(&:last)
+      else
+        raise ParserError, "Invalid format at line #{line_number}"
+      end
+      abort unless commit_email
+      [proper_name, proper_email, commit_name, commit_email]
     end
   end
 end
