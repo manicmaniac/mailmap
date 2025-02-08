@@ -2,7 +2,6 @@
 
 require 'bundler/gem_tasks'
 require 'rake/testtask'
-require 'rubocop'
 require 'rubocop/rake_task'
 
 Rake::TestTask.new(:test) do |t|
@@ -27,8 +26,16 @@ end
 
 file 'test/exe/check_mailmap_compatibility_test.rb' => 'test/exe/check_mailmap_compatibility_test.erb' do |task|
   require 'erb'
+  require 'rubocop'
 
   erb = ERB.new(File.read(task.source), trim_mode: '-')
   File.write(task.name, erb.result)
-  exit(RuboCop::CLI.new.run(['--auto-correct-all', task.name]))
+  options = {
+    autocorrect: true,
+    display_only_fail_level_offenses: true,
+    formatters: [[RuboCop::Formatter::QuietFormatter, nil]],
+    only: ['Style/StringLiterals']
+  }
+  config_store = RuboCop::ConfigStore.new
+  exit(RuboCop::Runner.new(options, config_store).run([task.name]))
 end
