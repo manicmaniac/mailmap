@@ -3,7 +3,6 @@
 require 'bundler/gem_tasks'
 require 'rake/testtask'
 require 'rubocop/rake_task'
-require 'steep/rake_task'
 
 Rake::TestTask.new(:test) do |t|
   t.libs << 'test'
@@ -12,7 +11,18 @@ Rake::TestTask.new(:test) do |t|
 end
 
 RuboCop::RakeTask.new
-Steep::RakeTask.new
+
+begin
+  require 'steep/rake_task'
+
+  Steep::RakeTask.new
+rescue LoadError
+  # For Ruby 2.7
+  desc 'Run steep check'
+  task :steep do
+    sh 'steep check'
+  end
+end
 
 task default: %i[steep test rubocop]
 
