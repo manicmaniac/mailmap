@@ -68,18 +68,20 @@ class CheckMailmapTest < Minitest::Test
     invalid_name: 'Commit Name'
   }
 
-  Enumerator.product(mailmap_patterns, contact_patterns) do |(mailmap_key, mailmap_value), (contact_key, contact_value)|
-    define_method("test_compatibility_on_#{mailmap_key}_with_#{contact_key}") do
-      Tempfile.create('mailmap', @git_dir) do |mailmap|
-        mailmap.write(mailmap_value)
-        mailmap.close
+  mailmap_patterns.each do |mailmap_key, mailmap_value|
+    contact_patterns.each do |contact_key, contact_value|
+      define_method("test_compatibility_on_#{mailmap_key}_with_#{contact_key}") do
+        Tempfile.create('mailmap', @git_dir) do |mailmap|
+          mailmap.write(mailmap_value)
+          mailmap.close
 
-        expected = git_check_mailmap(contact_value, mailmap_path: mailmap.path)
-        actual = check_mailmap(contact_value, mailmap_path: mailmap.path)
+          expected = git_check_mailmap(contact_value, mailmap_path: mailmap.path)
+          actual = check_mailmap(contact_value, mailmap_path: mailmap.path)
 
-        assert_equal(expected[0], actual[0]) # stdout
-        assert_equal(expected[1], actual[1]) # stderr
-        assert_equal(expected[2].exitstatus, actual[2].exitstatus) # status
+          assert_equal(expected[0], actual[0]) # stdout
+          assert_equal(expected[1], actual[1]) # stderr
+          assert_equal(expected[2].exitstatus, actual[2].exitstatus) # status
+        end
       end
     end
   end
