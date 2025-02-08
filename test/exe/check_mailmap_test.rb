@@ -71,6 +71,7 @@ class CheckMailmapTest < Minitest::Test
     define_method("test_compatibility_on_#{mailmap_key}_with_#{contact_key}") do
       Tempfile.create('mailmap', @git_dir) do |mailmap|
         mailmap.write(mailmap_value)
+        mailmap.close
 
         expected = git_check_mailmap(contact_value, mailmap_path: mailmap.path)
         actual = check_mailmap(contact_value, mailmap_path: mailmap.path)
