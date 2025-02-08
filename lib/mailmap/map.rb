@@ -113,9 +113,9 @@ module Mailmap
       scanner = StringScanner.new(line)
       2.times do
         scanner.skip(/\s+/)
-        scanner.scan(/[^<]+/).then { |s| tokens << [:name, s.rstrip] if s }
+        scanner.scan(/[^<]+/)&.then { |s| tokens << [:name, s.rstrip] }
         scanner.skip(/</)
-        scanner.scan(/[^>]+/).then { |s| tokens << [:email, s] if s }
+        scanner.scan(/[^>]+/)&.then { |s| tokens << [:email, s] }
         scanner.skip(/>/)
         scanner.skip(/\s*#.*$/)
       end
