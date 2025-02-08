@@ -10,6 +10,14 @@ class CheckMailmapTest < Minitest::Test
     assert(File.executable?(EXECUTABLE_PATH))
   end
 
+  def test_no_args
+    stdout, stderr, status = check_mailmap
+
+    refute_predicate(status, :success?)
+    assert_empty(stdout)
+    assert_match(/usage:/, stderr)
+  end
+
   def test_help
     stdout, stderr, status = check_mailmap('--help')
 
@@ -34,6 +42,14 @@ class CheckMailmapTest < Minitest::Test
     assert_equal("Proper Name <commit@email.xx>\n", stdout)
     assert_empty(stderr)
     assert_predicate(status, :success?)
+  end
+
+  def test_invalid_mailmap_path
+    stdout, stderr, status = check_mailmap('<commit@email.xx>', mailmap_path: 'invalid-path')
+
+    assert_empty(stdout)
+    assert_match(/fatal: No such file or directory/, stderr)
+    refute_predicate(status, :success?)
   end
 
   private
