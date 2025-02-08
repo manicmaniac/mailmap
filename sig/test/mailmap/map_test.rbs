@@ -1,0 +1,4 @@
+module Mailmap
+  class MapTest < Minitest::Test
+  end
+end
