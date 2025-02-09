@@ -46,6 +46,18 @@ mailmap.lookup('Nonexistent Name', 'nonexistent@example.com') #=> nil
 
 See [API reference](https://www.rubydoc.info/gems/mailmap) for more information.
 
+## Command Line
+
+This gem includes command-line tool named `check-mailmap`.
+It is pure Ruby implementation of [`git check-mailmap`](https://git-scm.com/docs/git-check-mailmap) and is intended to be a drop-in replacement for `git check-mailmap`.
+
+```sh
+$ bundle exec check-mailmap --help
+usage: check-mailmap [<options>] <contact>...
+    -f, --file=FILE                  path to the .mailmap file (default: ./.mailmap)
+        --stdin                      also read contacts from stdin
+```
+
 ## Development
 
 After checking out the repo, run `bundle install` to install dependencies. Then, run `rake test` to run the tests.
