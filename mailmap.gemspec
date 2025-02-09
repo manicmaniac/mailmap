@@ -7,19 +7,20 @@ Gem::Specification.new do |spec|
   spec.version       = Mailmap::VERSION
   spec.authors       = ['Ryosuke Ito']
   spec.email         = ['rito.0305@gmail.com']
-
   spec.summary       = 'Parser for Git Mailmap (.mailmap)'
   spec.description   = spec.summary
   spec.homepage      = 'https://github.com/manicmaniac/mailmap'
   spec.license       = 'MIT'
   spec.required_ruby_version = '>= 2.7.0'
-
-  spec.metadata['rubygems_mfa_required'] = 'true'
-  spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = spec.homepage
-
+  spec.metadata = {
+    'bug_tracker_uri' => 'https://github.com/manicmaniac/mailmap/issues',
+    'documentation_uri' => 'https://www.rubydoc.info/gems/mailmap',
+    'homepage_uri' => spec.homepage,
+    'rubygems_mfa_required' => 'true',
+    'source_code_uri' => spec.homepage
+  }
   spec.bindir = 'exe'
   spec.executables = ['check-mailmap']
-  spec.files = Dir['lib/**/*.rb', 'sig/**/*.rbs']
+  spec.files = Dir['lib/**/*.rb', 'sig/**/*.rbs', 'LICENSE.txt', 'README.md']
   spec.require_paths = ['lib']
 end
