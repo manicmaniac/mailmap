@@ -25,5 +25,6 @@ module Mailmap
     def tokenize_name_and_email: (String line) -> Array[[Symbol, String]]
     PATTERNS: Hash[Array[Symbol], Array[Symbol]]
     def parse_name_and_email: (Array[[Symbol, String]] tokens, Integer line_number) -> [String?, String?, String?, String]
+    def unquote_email: (String email) -> String
   end
 end
