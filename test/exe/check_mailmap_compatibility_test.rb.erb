@@ -76,8 +76,8 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     command = [
       RbConfig.ruby,
       '-r',
-      File.expand_path('../simplecov_spawn.rb', __dir__ || abort),
-      File.expand_path('../../exe/check-mailmap', __dir__ || abort)
+      File.expand_path('../../simplecov_spawn.rb', __FILE__),
+      File.expand_path('../../../exe/check-mailmap', __FILE__)
     ]
     command += ['-f', mailmap_path] if mailmap_path
     command += args
