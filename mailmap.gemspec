@@ -16,8 +16,7 @@ Gem::Specification.new do |spec|
     'bug_tracker_uri' => 'https://github.com/manicmaniac/mailmap/issues',
     'documentation_uri' => 'https://www.rubydoc.info/gems/mailmap',
     'homepage_uri' => spec.homepage,
-    'rubygems_mfa_required' => 'true',
-    'source_code_uri' => spec.homepage
+    'rubygems_mfa_required' => 'true'
   }
   spec.bindir = 'exe'
   spec.executables = ['check-mailmap']
