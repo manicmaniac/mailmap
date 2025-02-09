@@ -7,7 +7,6 @@ Gem::Specification.new do |spec|
   spec.version       = Mailmap::VERSION
   spec.authors       = ['Ryosuke Ito']
   spec.email         = ['rito.0305@gmail.com']
-
   spec.summary       = 'Parser for Git Mailmap (.mailmap)'
   spec.description   = spec.summary
   spec.homepage      = 'https://github.com/manicmaniac/mailmap'
