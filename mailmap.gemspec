@@ -22,6 +22,6 @@ Gem::Specification.new do |spec|
   }
   spec.bindir = 'exe'
   spec.executables = ['check-mailmap']
-  spec.files = Dir['lib/**/*.rb', 'sig/**/*.rbs']
+  spec.files = Dir['lib/**/*.rb', 'sig/**/*.rbs', 'LICENSE.txt', 'README.md']
   spec.require_paths = ['lib']
 end
