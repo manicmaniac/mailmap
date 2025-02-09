@@ -37,7 +37,7 @@ namespace :test do
   task generate: ['test/exe/check_mailmap_compatibility_test.rb']
 end
 
-file 'test/exe/check_mailmap_compatibility_test.rb' => 'test/exe/check_mailmap_compatibility_test.rb.erb' do |task|
+rule '.rb' => '.rb.erb' do |task|
   require 'erb'
   require 'rubocop'
 
