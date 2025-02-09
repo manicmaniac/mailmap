@@ -55,8 +55,8 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
       invalid_name: 'Commit Name'
     }
   -%>
-  <%- mailmap_patterns.map do |mailmap_key, mailmap_value| -%>
-    <%- contact_patterns.map do |contact_key, contact_value| -%>
+  <%- mailmap_patterns.each do |mailmap_key, mailmap_value| -%>
+    <%- contact_patterns.each do |contact_key, contact_value| -%>
 
   def test_check_mailmap_on_<%= mailmap_key %>_with_<%= contact_key %>
     @mailmap.write(<%= mailmap_value.inspect %>)
