@@ -3,7 +3,7 @@
 target :exe do
   unreferenced!
   implicitly_returns_nil!
-  signature 'sig/exe'
+  signature 'sig/_exe'
   library 'optparse'
 
   check 'exe/check-mailmap'
@@ -19,7 +19,7 @@ end
 target :test do
   unreferenced!
   implicitly_returns_nil!
-  signature 'sig/test'
+  signature 'sig/_test'
   library 'minitest'
   library 'open3'
   library 'tempfile'
