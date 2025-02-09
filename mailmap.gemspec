@@ -13,11 +13,13 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/manicmaniac/mailmap'
   spec.license       = 'MIT'
   spec.required_ruby_version = '>= 2.7.0'
-
-  spec.metadata['rubygems_mfa_required'] = 'true'
-  spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = spec.homepage
-
+  spec.metadata = {
+    'rubygems_mfa_required' => 'true',
+    'bug_tracker_uri' => 'https://github.com/manicmaniac/mailmap/issues',
+    'documentation_uri' => 'https://www.rubydoc.info/gems/mailmap',
+    'homepage_uri' => spec.homepage,
+    'source_code_uri' => spec.homepage
+  }
   spec.bindir = 'exe'
   spec.executables = ['check-mailmap']
   spec.files = Dir['lib/**/*.rb', 'sig/**/*.rbs']
