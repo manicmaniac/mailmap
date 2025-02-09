@@ -107,16 +107,14 @@ module Mailmap
       end
     end
 
-    def tokenize_name_and_email(line) # rubocop:disable Metrics/MethodLength
+    def tokenize_name_and_email(line)
       # @type var tokens: Array[[Symbol, String]]
       tokens = []
       scanner = StringScanner.new(line)
       2.times do
         scanner.skip(/\s+/)
         scanner.scan(/[^<]+/)&.then { |s| tokens << [:name, s.rstrip] }
-        scanner.skip(/</)
-        scanner.scan(/[^>]+/)&.then { |s| tokens << [:email, s] }
-        scanner.skip(/>/)
+        scanner.scan(/<(.*?)>/)&.then { |s| tokens << [:email, unquote_email(s)] }
         scanner.skip(/\s*#.*$/)
       end
       tokens
@@ -137,6 +135,10 @@ module Mailmap
       fields = PATTERNS[types] or raise ParserError, "Invalid format at line #{line_number}"
       entry = fields.zip(values).to_h
       [entry[:proper_name], entry[:proper_email], entry[:commit_name], entry.fetch(:commit_email)]
+    end
+
+    def unquote_email(email)
+      email.delete_prefix('<').delete_suffix('>')
     end
   end
 end
