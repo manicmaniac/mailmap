@@ -16,7 +16,8 @@ Gem::Specification.new do |spec|
   spec.license       = 'MIT'
   spec.required_ruby_version = '>= 2.7.0'
   spec.metadata = {
-    'bug_tracker_uri' => 'https://github.com/manicmaniac/mailmap/issues',
+    'bug_tracker_uri' => "#{spec.homepage}/issues",
+    'changelog_uri' => "#{spec.homepage}/releases",
     'documentation_uri' => 'https://www.rubydoc.info/gems/mailmap',
     'homepage_uri' => spec.homepage,
     'rubygems_mfa_required' => 'true'
