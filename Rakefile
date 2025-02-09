@@ -26,6 +26,13 @@ end
 
 task default: %i[steep test rubocop]
 
+namespace :coverage do
+  desc 'Remove coverage reports'
+  task :clean do
+    FileUtils.rm_rf(File.expand_path('../coverage', __FILE__))
+  end
+end
+
 namespace :test do
   desc 'Generate test cases'
   task generate: ['test/exe/check_mailmap_compatibility_test.rb']
