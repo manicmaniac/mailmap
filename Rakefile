@@ -4,6 +4,8 @@ require 'bundler/gem_tasks'
 require 'rake/testtask'
 require 'rubocop/rake_task'
 
+task default: %i[steep test rubocop]
+
 Rake::TestTask.new(test: %i[coverage:clean]) do |t|
   t.libs += %w[lib test]
   t.pattern = 'test/**/*_test.rb'
@@ -22,8 +24,6 @@ rescue LoadError
     sh 'steep check'
   end
 end
-
-task default: %i[steep test rubocop]
 
 namespace :coverage do
   desc 'Remove coverage reports'
