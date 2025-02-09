@@ -5,3 +5,8 @@ require:
 AllCops:
   TargetRubyVersion: 2.7
   NewCops: enable
+
+# Currently `__FILE__: String` but `__dir__: String?` in RBS type definitions.
+# So we prefer `__FILE__` over `__dir__` for the time being.
+Style/ExpandPathArguments:
+  Enabled: false

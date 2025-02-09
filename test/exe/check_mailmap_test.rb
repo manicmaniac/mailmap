@@ -53,14 +53,14 @@ class CheckMailmapTest < Minitest::Test
 
   private
 
-  EXECUTABLE_PATH = File.expand_path('../../exe/check-mailmap', __dir__ || abort)
+  EXECUTABLE_PATH = File.expand_path('../../../exe/check-mailmap', __FILE__)
   private_constant :EXECUTABLE_PATH
 
   def check_mailmap(*args, mailmap_path: nil, stdin_data: nil)
     command = [
       RbConfig.ruby,
       '-r',
-      File.expand_path('../simplecov_spawn.rb', __dir__ || abort),
+      File.expand_path('../../simplecov_spawn.rb', __FILE__),
       EXECUTABLE_PATH
     ]
     command += ['-f', mailmap_path] if mailmap_path
