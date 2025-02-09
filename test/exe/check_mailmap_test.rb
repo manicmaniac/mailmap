@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'fileutils'
 require 'open3'
 require 'tempfile'
 require 'test_helper'
@@ -57,16 +56,15 @@ class CheckMailmapTest < Minitest::Test
   EXECUTABLE_PATH = File.expand_path('../../exe/check-mailmap', __dir__ || abort)
   private_constant :EXECUTABLE_PATH
 
-  def check_mailmap(*args, mailmap_path: '', stdin_data: nil)
-    Open3.capture3(
+  def check_mailmap(*args, mailmap_path: nil, stdin_data: nil)
+    command = [
       RbConfig.ruby,
       '-r',
       File.expand_path('../simplecov_spawn.rb', __dir__ || abort),
-      EXECUTABLE_PATH,
-      '-f',
-      mailmap_path,
-      *args,
-      stdin_data: stdin_data
-    )
+      EXECUTABLE_PATH
+    ]
+    command += ['-f', mailmap_path] if mailmap_path
+    command += args
+    Open3.capture3(*command, stdin_data: stdin_data)
   end
 end

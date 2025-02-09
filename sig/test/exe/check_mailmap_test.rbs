@@ -3,7 +3,7 @@ class CheckMailmapTest < Minitest::Test
 
   EXECUTABLE_PATH: String
 
-  def check_mailmap: (*untyped args, ?mailmap_path: String, ?stdin_data: String?) -> [String, String, Process::Status]
+  def check_mailmap: (*untyped args, ?mailmap_path: String?, ?stdin_data: String?) -> [String, String, Process::Status]
 end
 
 # https://github.com/ruby/rbs/blob/v3.8.1/stdlib/open3/0/open3.rbs
