@@ -17,6 +17,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.7.0'
   spec.metadata = {
     'bug_tracker_uri' => 'https://github.com/manicmaniac/mailmap/issues',
+    'changelog_uri' => "https://github.com/manicmaniac/mailmap/blob/#{spec.version}/Rakefile",
     'documentation_uri' => 'https://www.rubydoc.info/gems/mailmap',
     'homepage_uri' => spec.homepage,
     'rubygems_mfa_required' => 'true'
