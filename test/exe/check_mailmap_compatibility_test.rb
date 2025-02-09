@@ -423,16 +423,16 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
 
   private
 
-  def check_mailmap(*args, mailmap_path: '')
-    stdout, stderr, status = Open3.capture3(
+  def check_mailmap(*args, mailmap_path: nil)
+    command = [
       RbConfig.ruby,
       '-r',
       File.expand_path('../simplecov_spawn.rb', __dir__ || abort),
-      File.expand_path('../../exe/check-mailmap', __dir__ || abort),
-      '-f',
-      mailmap_path,
-      *args
-    )
+      File.expand_path('../../exe/check-mailmap', __dir__ || abort)
+    ]
+    command += ['-f', mailmap_path] if mailmap_path
+    command += args
+    stdout, stderr, status = Open3.capture3(*command)
     [stdout, stderr, status.exitstatus]
   end
 end
