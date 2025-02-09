@@ -4,10 +4,11 @@ require 'bundler/gem_tasks'
 require 'rake/testtask'
 require 'rubocop/rake_task'
 
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'test'
-  t.libs << 'lib'
-  t.test_files = FileList['test/**/*_test.rb']
+task default: %i[steep test rubocop]
+
+Rake::TestTask.new(test: %i[coverage:clean]) do |t|
+  t.libs += %w[lib test]
+  t.pattern = 'test/**/*_test.rb'
 end
 
 RuboCop::RakeTask.new
@@ -24,14 +25,19 @@ rescue LoadError
   end
 end
 
-task default: %i[steep test rubocop]
+namespace :coverage do
+  desc 'Remove coverage reports'
+  task :clean do
+    FileUtils.rm_rf(File.expand_path('../coverage', __FILE__))
+  end
+end
 
 namespace :test do
   desc 'Generate test cases'
   task generate: ['test/exe/check_mailmap_compatibility_test.rb']
 end
 
-file 'test/exe/check_mailmap_compatibility_test.rb' => 'test/exe/check_mailmap_compatibility_test.rb.erb' do |task|
+rule '.rb' => '.rb.erb' do |task|
   require 'erb'
   require 'rubocop'
 
