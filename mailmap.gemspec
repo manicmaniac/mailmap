@@ -13,10 +13,10 @@ Gem::Specification.new do |spec|
   spec.license       = 'MIT'
   spec.required_ruby_version = '>= 2.7.0'
   spec.metadata = {
-    'rubygems_mfa_required' => 'true',
     'bug_tracker_uri' => 'https://github.com/manicmaniac/mailmap/issues',
     'documentation_uri' => 'https://www.rubydoc.info/gems/mailmap',
     'homepage_uri' => spec.homepage,
+    'rubygems_mfa_required' => 'true',
     'source_code_uri' => spec.homepage
   }
   spec.bindir = 'exe'
