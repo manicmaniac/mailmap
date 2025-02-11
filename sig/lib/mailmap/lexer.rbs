@@ -1,0 +1,14 @@
+module Mailmap
+  class Lexer
+    include Enumerable[[Symbol, String?]?]
+
+    @scanner: StringScanner
+
+    def initialize: (String string) -> void
+    def each: ?{ ([Symbol, String?]?) -> void } -> (Enumerator[[Symbol, String?]?, void] | Lexer)
+
+    private
+
+    def unquote_email: (String) -> String
+  end
+end

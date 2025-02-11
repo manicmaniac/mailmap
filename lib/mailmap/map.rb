@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 
+require 'mailmap/parser'
 require 'strscan'
 
 module Mailmap
-  # This exception is raised if a parser error occurs.
-  class ParserError < StandardError
-  end
-
   # A Map represents a .mailmap file.
   class Map
     include Enumerable
@@ -98,47 +95,9 @@ module Mailmap
     private
 
     def parse(string)
-      string.each_line.with_index(1) do |line, line_number|
-        next if line.start_with?('#')
-
-        tokens = tokenize_name_and_email(line)
-        proper_name, proper_email, commit_name, commit_email = parse_name_and_email(tokens, line_number)
-        @map[commit_email.downcase][commit_name&.downcase] = [proper_name, proper_email]
+      Parser.new.parse(string).each do |entry|
+        @map[entry.commit_email.downcase][entry.commit_name&.downcase] = [entry.proper_name, entry.proper_email]
       end
-    end
-
-    def tokenize_name_and_email(line)
-      # @type var tokens: Array[[Symbol, String]]
-      tokens = []
-      scanner = StringScanner.new(line)
-      2.times do
-        scanner.skip(/\s+/)
-        scanner.scan(/[^<]+/)&.then { |s| tokens << [:name, s.rstrip] }
-        scanner.scan(/<(.*?)>/)&.then { |s| tokens << [:email, unquote_email(s)] }
-        scanner.skip(/\s*#.*$/)
-      end
-      tokens
-    end
-
-    PATTERNS = {
-      %i[name email] => %i[proper_name commit_email],
-      %i[email email] => %i[proper_email commit_email],
-      %i[name email email] => %i[proper_name proper_email commit_email],
-      %i[email name email] => %i[proper_email commit_name commit_email],
-      %i[name email name email] => %i[proper_name proper_email commit_name commit_email]
-    }.freeze
-    private_constant :PATTERNS
-
-    def parse_name_and_email(tokens, line_number)
-      types = tokens.map(&:first)
-      values = tokens.map(&:last)
-      fields = PATTERNS[types] or raise ParserError, "Invalid format at line #{line_number}"
-      entry = fields.zip(values).to_h
-      [entry[:proper_name], entry[:proper_email], entry[:commit_name], entry.fetch(:commit_email)]
-    end
-
-    def unquote_email(email)
-      email.delete_prefix('<').delete_suffix('>')
     end
   end
 end

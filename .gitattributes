@@ -1,2 +1,4 @@
+lib/mailmap/parser.rb linguist-generated
+lib/mailmap/parser.y linguist-language=Ruby
 test/exe/check_mailmap_compatibility_test.rb linguist-generated
 test/exe/check_mailmap_compatibility_test.rb.erb linguist-language=Ruby
