@@ -32,9 +32,18 @@ namespace :coverage do
   end
 end
 
-namespace :test do
+task generate: %i[generate:parser generate:test]
+
+namespace :generate do
+  desc 'Generate parser'
+  task parser: ['lib/mailmap/parser.rb']
+
   desc 'Generate test cases'
-  task generate: ['test/exe/check_mailmap_compatibility_test.rb']
+  task test: ['test/exe/check_mailmap_compatibility_test.rb']
+end
+
+rule '.rb' => '.y' do |task|
+  sh 'racc', '--embedded', '--frozen', '--output-file', task.name, task.source
 end
 
 rule '.rb' => '.rb.erb' do |task|

@@ -1,0 +1,27 @@
+module Racc
+  class ParseError < StandardError
+  end
+
+  class Parser
+  end
+end
+
+module Mailmap
+  class Entry
+    attr_accessor proper_name: String?
+    attr_accessor proper_email: String?
+    attr_accessor commit_name: String?
+    attr_accessor commit_email: String
+  end
+
+  class Parser < Racc::Parser
+    Racc_arg: ::Array[untyped]
+
+    Racc_token_to_s_table: ::Array[String]
+
+    Racc_debug_parser: false
+
+    def parse: (String string) -> [Entry]
+    def _reduce_none: (untyped val, untyped _values, untyped result) -> untyped
+  end
+end
