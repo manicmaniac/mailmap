@@ -59,11 +59,11 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     <%- contact_patterns.each do |contact_key, contact_value| -%>
 
   def test_check_mailmap_on_<%= mailmap_key %>_with_<%= contact_key %>
-    @mailmap.write(<%= mailmap_value.inspect %>)
+    @mailmap.write(<%= mailmap_value.dump %>)
     @mailmap.close
 
     expected = <%= git_check_mailmap(contact_value, mailmap_value: mailmap_value) %>
-    actual = check_mailmap(<%= contact_value.inspect %>, mailmap_path: @mailmap.path)
+    actual = check_mailmap(<%= contact_value.dump %>, mailmap_path: @mailmap.path)
 
     assert_equal(expected, actual)
   end
