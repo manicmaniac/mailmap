@@ -34,6 +34,9 @@ mailmap = Mailmap::Map.load('.mailmap')
 # Parse string
 mailmap = Mailmap::Map.parse('Proper Name <proper@example.com> <commit@example.com>')
 
+# Parse string with optional filename
+mailmap = Mailmap::Map.parse('Proper Name <proper@example.com> <commit@example.com>', '.mailmap')
+
 # Equivalent to git check-mailmap 'Commit Name' 'commit@example.com'
 mailmap.resolve('Commit Name', 'commit@example.com') # => ['Proper Name', 'proper@example.com']
 

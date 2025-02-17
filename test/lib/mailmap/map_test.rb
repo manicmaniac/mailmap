@@ -185,9 +185,11 @@ module Mailmap
     end
 
     def test_parse_with_invalid_line
-      assert_raises(ParserError) do
-        Map.parse('This line is invalid')
-      end
+      Map.parse('This line is invalid', '/path/to/mailmap')
+
+      flunk('ParserError was not raised')
+    rescue ParserError => e
+      assert_equal('Invalid mailmap entry at /path/to/mailmap:1', e.message)
     end
 
     def test_parse_with_simple_entry
