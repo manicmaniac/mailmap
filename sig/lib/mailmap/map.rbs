@@ -7,11 +7,14 @@ module Mailmap
 
   class Map
     include Enumerable[[String?, String?, String?, String]]
+
+    attr_reader filename: String?
     @map: Hash[String, Hash[String?, [String?, String?]]]
 
     def self.load: (String path) -> Map
     alias self.parse self.new
-    def initialize: (String string) -> void
+
+    def initialize: (String string, ?String? filename) -> void
     def each: ?{ (String?, String?, String?, String) -> void } -> (Enumerator[[String?, String?, String?, String], void] | Map)
     def lookup: (String? commit_name_or_nil, String commit_email) -> [String?, String?]?
     def resolve: (String commit_name_or_nil, String commit_email) -> [String, String]
@@ -26,5 +29,6 @@ module Mailmap
     PATTERNS: Hash[Array[Symbol], Array[Symbol]]
     def parse_name_and_email: (Array[[Symbol, String]] tokens, Integer line_number) -> [String?, String?, String?, String]
     def unquote_email: (String email) -> String
+    def location: (Integer line_number) -> String
   end
 end

@@ -17,15 +17,19 @@ module Mailmap
       # @param path [String] the path to .mailmap file
       # @return [Map]
       def load(path)
-        new(File.read(path))
+        new(File.read(path), path)
       end
 
       alias parse new
     end
 
+    attr_reader :filename
+
     # @param string [String] the string in .mailmap format
-    def initialize(string)
+    # @param filename [String, nil] the path to .mailmap file
+    def initialize(string, filename = nil)
       # @type ivar @map: Hash[String, Hash[String?, String?]]
+      @filename = filename
       @map = Hash.new { |h, k| h[k] = {} }
       parse(string)
     end
@@ -132,13 +136,17 @@ module Mailmap
     def parse_name_and_email(tokens, line_number)
       types = tokens.map(&:first)
       values = tokens.map(&:last)
-      fields = PATTERNS[types] or raise ParserError, "Invalid format at line #{line_number}"
+      fields = PATTERNS[types] or raise ParserError, "Invalid mailmap entry at #{location(line_number)}"
       entry = fields.zip(values).to_h
       [entry[:proper_name], entry[:proper_email], entry[:commit_name], entry.fetch(:commit_email)]
     end
 
     def unquote_email(email)
       email.delete_prefix('<').delete_suffix('>')
+    end
+
+    def location(line_number)
+      filename ? "#{filename}:#{line_number}" : "line #{line_number}"
     end
   end
 end
