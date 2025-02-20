@@ -1,5 +1,5 @@
 class CheckMailmapCompatibilityTest < Minitest::Test
   @mailmap: Tempfile
 
-  def check_mailmap: (*String args, ?mailmap_path: String?) -> [String, String, Integer?]
+  def check_mailmap: (*String args) -> [String, String, Integer?]
 end
