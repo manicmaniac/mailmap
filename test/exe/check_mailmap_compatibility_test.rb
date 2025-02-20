@@ -23,715 +23,645 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
 
   def test_check_mailmap_on_empty_with_email_should_not_be_found
     @mailmap.write("\n")
-    @mailmap.close
 
     expected = ["<commit@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_empty_with_name_email_should_not_be_found
     @mailmap.write("\n")
-    @mailmap.close
 
     expected = ["Commit Name <commit@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_empty_with_wrong_email_should_not_be_found
     @mailmap.write("\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_empty_with_invalid_empty_should_not_be_found
     @mailmap.write("\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_empty_with_invalid_name_should_not_be_found
     @mailmap.write("\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_name_with_email_should_not_be_found
     @mailmap.write("Proper Name Commit Name\n")
-    @mailmap.close
 
     expected = ["<commit@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_name_with_name_email_should_not_be_found
     @mailmap.write("Proper Name Commit Name\n")
-    @mailmap.close
 
     expected = ["Commit Name <commit@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_name_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name Commit Name\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_name_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name Commit Name\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_name_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name Commit Name\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_with_email_should_be_found
     @mailmap.write("Proper Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["Proper Name <commit@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_with_name_email_should_be_found
     @mailmap.write("Proper Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["Proper Name <commit@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_email_email_with_email_should_be_found
     @mailmap.write("<proper@email.xx> <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["<proper@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_email_email_with_name_email_should_be_found
     @mailmap.write("<proper@email.xx> <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["Commit Name <proper@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_email_email_with_wrong_email_should_not_be_found
     @mailmap.write("<proper@email.xx> <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_email_email_with_invalid_empty_should_not_be_found
     @mailmap.write("<proper@email.xx> <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_email_email_with_invalid_name_should_not_be_found
     @mailmap.write("<proper@email.xx> <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_name_email_with_email_should_be_found
     @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["Proper Name Commit Name <commit@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_name_email_with_name_email_should_be_found
     @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["Proper Name Commit Name <commit@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_name_email_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_name_email_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_name_email_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_email_with_email_should_be_found
     @mailmap.write("Proper Name <proper@email.xx> <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["Proper Name <proper@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_email_with_name_email_should_be_found
     @mailmap.write("Proper Name <proper@email.xx> <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["Proper Name <proper@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_email_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_email_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_email_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_name_email_with_email_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["<commit@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_name_email_with_name_email_should_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["Proper Name <proper@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_name_email_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_name_email_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_name_email_name_email_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_email_name_email_with_email_should_not_be_found
     @mailmap.write("<proper@email.xx> Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["<commit@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_email_name_email_with_name_email_should_be_found
     @mailmap.write("<proper@email.xx> Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["Commit Name <proper@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_email_name_email_with_wrong_email_should_not_be_found
     @mailmap.write("<proper@email.xx> Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_email_name_email_with_invalid_empty_should_not_be_found
     @mailmap.write("<proper@email.xx> Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_email_name_email_with_invalid_name_should_not_be_found
     @mailmap.write("<proper@email.xx> Commit Name <commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_comment_with_email_should_not_be_found
     @mailmap.write("# Comment\n")
-    @mailmap.close
 
     expected = ["<commit@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_comment_with_name_email_should_not_be_found
     @mailmap.write("# Comment\n")
-    @mailmap.close
 
     expected = ["Commit Name <commit@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_comment_with_wrong_email_should_not_be_found
     @mailmap.write("# Comment\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_comment_with_invalid_empty_should_not_be_found
     @mailmap.write("# Comment\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_comment_with_invalid_name_should_not_be_found
     @mailmap.write("# Comment\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_trailing_comment_with_email_should_be_found
     @mailmap.write("Proper Name <commit@email.xx> # Comment\n")
-    @mailmap.close
 
     expected = ["Proper Name <commit@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_trailing_comment_with_name_email_should_be_found
     @mailmap.write("Proper Name <commit@email.xx> # Comment\n")
-    @mailmap.close
 
     expected = ["Proper Name <commit@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_trailing_comment_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name <commit@email.xx> # Comment\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_trailing_comment_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name <commit@email.xx> # Comment\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_trailing_comment_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name <commit@email.xx> # Comment\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_name_with_email_should_not_be_found
     @mailmap.write("Commit Name\n")
-    @mailmap.close
 
     expected = ["<commit@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_name_with_name_email_should_not_be_found
     @mailmap.write("Commit Name\n")
-    @mailmap.close
 
     expected = ["Commit Name <commit@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_name_with_wrong_email_should_not_be_found
     @mailmap.write("Commit Name\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_name_with_invalid_empty_should_not_be_found
     @mailmap.write("Commit Name\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_name_with_invalid_name_should_not_be_found
     @mailmap.write("Commit Name\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_name_email_name_with_email_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
-    @mailmap.close
 
     expected = ["<commit@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_name_email_name_with_name_email_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
-    @mailmap.close
 
     expected = ["Commit Name <commit@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_name_email_name_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_name_email_name_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_name_email_name_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_email_with_email_should_not_be_found
     @mailmap.write("<commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["<commit@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_email_with_name_email_should_not_be_found
     @mailmap.write("<commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["Commit Name <commit@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_email_with_wrong_email_should_not_be_found
     @mailmap.write("<commit@email.xx>\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_email_with_invalid_empty_should_not_be_found
     @mailmap.write("<commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_email_with_invalid_name_should_not_be_found
     @mailmap.write("<commit@email.xx>\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_email_name_with_email_should_not_be_found
     @mailmap.write("<commit@email.xx> Proper Name\n")
-    @mailmap.close
 
     expected = ["<commit@email.xx>\n", '', 0]
-    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_email_name_with_name_email_should_not_be_found
     @mailmap.write("<commit@email.xx> Proper Name\n")
-    @mailmap.close
 
     expected = ["Commit Name <commit@email.xx>\n", '', 0]
-    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name <commit@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_email_name_with_wrong_email_should_not_be_found
     @mailmap.write("<commit@email.xx> Proper Name\n")
-    @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
-    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+    actual = check_mailmap('<wrong@email.xx>')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_email_name_with_invalid_empty_should_not_be_found
     @mailmap.write("<commit@email.xx> Proper Name\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: \n", 128]
-    actual = check_mailmap('', mailmap_path: @mailmap.path)
+    actual = check_mailmap('')
 
     assert_equal(expected, actual)
   end
 
   def test_check_mailmap_on_invalid_email_name_with_invalid_name_should_not_be_found
     @mailmap.write("<commit@email.xx> Proper Name\n")
-    @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
-    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+    actual = check_mailmap('Commit Name')
 
     assert_equal(expected, actual)
   end
 
   private
 
-  def check_mailmap(*args, mailmap_path: nil)
+  def check_mailmap(*args)
+    @mailmap.close
     command = [
       RbConfig.ruby,
       '-r',
       File.expand_path('../../simplecov_spawn.rb', __FILE__),
-      File.expand_path('../../../exe/check-mailmap', __FILE__)
-    ]
-    command += ['-f', mailmap_path] if mailmap_path
-    command += args
+      File.expand_path('../../../exe/check-mailmap', __FILE__),
+      '-f', @mailmap.path
+    ] + args
     stdout, stderr, status = Open3.capture3(*command)
     [stdout, stderr, status.exitstatus]
   end

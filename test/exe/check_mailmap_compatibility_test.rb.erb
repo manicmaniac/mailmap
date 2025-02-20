@@ -66,10 +66,9 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
   <%- stdout, stderr, status = git_check_mailmap(contact_value, mailmap_value: mailmap_value) -%>
   def test_check_mailmap_on_<%= mailmap_key %>_with_<%= contact_key %>_should<%= '_not' unless stdout =~ /proper/i %>_be_found
     @mailmap.write(<%= mailmap_value.dump %>)
-    @mailmap.close
 
     expected = <%= [stdout, stderr, status] %>
-    actual = check_mailmap(<%= contact_value.dump %>, mailmap_path: @mailmap.path)
+    actual = check_mailmap(<%= contact_value.dump %>)
 
     assert_equal(expected, actual)
   end
@@ -78,15 +77,15 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
 
   private
 
-  def check_mailmap(*args, mailmap_path: nil)
+  def check_mailmap(*args)
+    @mailmap.close
     command = [
       RbConfig.ruby,
       '-r',
       File.expand_path('../../simplecov_spawn.rb', __FILE__),
-      File.expand_path('../../../exe/check-mailmap', __FILE__)
-    ]
-    command += ['-f', mailmap_path] if mailmap_path
-    command += args
+      File.expand_path('../../../exe/check-mailmap', __FILE__),
+      '-f', @mailmap.path
+    ] + args
     stdout, stderr, status = Open3.capture3(*command)
     [stdout, stderr, status.exitstatus]
   end
