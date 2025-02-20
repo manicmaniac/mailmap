@@ -21,7 +21,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     @mailmap.close!
   end
 
-  def test_check_mailmap_on_empty_with_email
+  def test_check_mailmap_on_empty_with_email_should_not_be_found
     @mailmap.write("\n")
     @mailmap.close
 
@@ -31,7 +31,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_empty_with_name_email
+  def test_check_mailmap_on_empty_with_name_email_should_not_be_found
     @mailmap.write("\n")
     @mailmap.close
 
@@ -41,7 +41,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_empty_with_wrong_email
+  def test_check_mailmap_on_empty_with_wrong_email_should_not_be_found
     @mailmap.write("\n")
     @mailmap.close
 
@@ -51,7 +51,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_empty_with_invalid_empty
+  def test_check_mailmap_on_empty_with_invalid_empty_should_not_be_found
     @mailmap.write("\n")
     @mailmap.close
 
@@ -61,7 +61,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_empty_with_invalid_name
+  def test_check_mailmap_on_empty_with_invalid_name_should_not_be_found
     @mailmap.write("\n")
     @mailmap.close
 
@@ -71,7 +71,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_name_with_email
+  def test_check_mailmap_on_name_name_with_email_should_not_be_found
     @mailmap.write("Proper Name Commit Name\n")
     @mailmap.close
 
@@ -81,7 +81,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_name_with_name_email
+  def test_check_mailmap_on_name_name_with_name_email_should_not_be_found
     @mailmap.write("Proper Name Commit Name\n")
     @mailmap.close
 
@@ -91,7 +91,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_name_with_wrong_email
+  def test_check_mailmap_on_name_name_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name Commit Name\n")
     @mailmap.close
 
@@ -101,7 +101,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_name_with_invalid_empty
+  def test_check_mailmap_on_name_name_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name Commit Name\n")
     @mailmap.close
 
@@ -111,7 +111,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_name_with_invalid_name
+  def test_check_mailmap_on_name_name_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name Commit Name\n")
     @mailmap.close
 
@@ -121,7 +121,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_with_email
+  def test_check_mailmap_on_name_email_with_email_should_be_found
     @mailmap.write("Proper Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -131,7 +131,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_with_name_email
+  def test_check_mailmap_on_name_email_with_name_email_should_be_found
     @mailmap.write("Proper Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -141,7 +141,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_with_wrong_email
+  def test_check_mailmap_on_name_email_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -151,7 +151,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_with_invalid_empty
+  def test_check_mailmap_on_name_email_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -161,7 +161,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_with_invalid_name
+  def test_check_mailmap_on_name_email_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -171,7 +171,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_email_email_with_email
+  def test_check_mailmap_on_email_email_with_email_should_be_found
     @mailmap.write("<proper@email.xx> <commit@email.xx>\n")
     @mailmap.close
 
@@ -181,7 +181,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_email_email_with_name_email
+  def test_check_mailmap_on_email_email_with_name_email_should_be_found
     @mailmap.write("<proper@email.xx> <commit@email.xx>\n")
     @mailmap.close
 
@@ -191,7 +191,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_email_email_with_wrong_email
+  def test_check_mailmap_on_email_email_with_wrong_email_should_not_be_found
     @mailmap.write("<proper@email.xx> <commit@email.xx>\n")
     @mailmap.close
 
@@ -201,7 +201,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_email_email_with_invalid_empty
+  def test_check_mailmap_on_email_email_with_invalid_empty_should_not_be_found
     @mailmap.write("<proper@email.xx> <commit@email.xx>\n")
     @mailmap.close
 
@@ -211,7 +211,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_email_email_with_invalid_name
+  def test_check_mailmap_on_email_email_with_invalid_name_should_not_be_found
     @mailmap.write("<proper@email.xx> <commit@email.xx>\n")
     @mailmap.close
 
@@ -221,7 +221,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_name_email_with_email
+  def test_check_mailmap_on_name_name_email_with_email_should_be_found
     @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -231,7 +231,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_name_email_with_name_email
+  def test_check_mailmap_on_name_name_email_with_name_email_should_be_found
     @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -241,7 +241,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_name_email_with_wrong_email
+  def test_check_mailmap_on_name_name_email_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -251,7 +251,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_name_email_with_invalid_empty
+  def test_check_mailmap_on_name_name_email_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -261,7 +261,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_name_email_with_invalid_name
+  def test_check_mailmap_on_name_name_email_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -271,7 +271,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_email_with_email
+  def test_check_mailmap_on_name_email_email_with_email_should_be_found
     @mailmap.write("Proper Name <proper@email.xx> <commit@email.xx>\n")
     @mailmap.close
 
@@ -281,7 +281,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_email_with_name_email
+  def test_check_mailmap_on_name_email_email_with_name_email_should_be_found
     @mailmap.write("Proper Name <proper@email.xx> <commit@email.xx>\n")
     @mailmap.close
 
@@ -291,7 +291,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_email_with_wrong_email
+  def test_check_mailmap_on_name_email_email_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> <commit@email.xx>\n")
     @mailmap.close
 
@@ -301,7 +301,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_email_with_invalid_empty
+  def test_check_mailmap_on_name_email_email_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> <commit@email.xx>\n")
     @mailmap.close
 
@@ -311,7 +311,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_email_with_invalid_name
+  def test_check_mailmap_on_name_email_email_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> <commit@email.xx>\n")
     @mailmap.close
 
@@ -321,7 +321,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_name_email_with_email
+  def test_check_mailmap_on_name_email_name_email_with_email_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -331,7 +331,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_name_email_with_name_email
+  def test_check_mailmap_on_name_email_name_email_with_name_email_should_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -341,7 +341,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_name_email_with_wrong_email
+  def test_check_mailmap_on_name_email_name_email_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -351,7 +351,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_name_email_with_invalid_empty
+  def test_check_mailmap_on_name_email_name_email_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -361,7 +361,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_name_email_name_email_with_invalid_name
+  def test_check_mailmap_on_name_email_name_email_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -371,7 +371,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_email_name_email_with_email
+  def test_check_mailmap_on_email_name_email_with_email_should_not_be_found
     @mailmap.write("<proper@email.xx> Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -381,7 +381,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_email_name_email_with_name_email
+  def test_check_mailmap_on_email_name_email_with_name_email_should_be_found
     @mailmap.write("<proper@email.xx> Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -391,7 +391,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_email_name_email_with_wrong_email
+  def test_check_mailmap_on_email_name_email_with_wrong_email_should_not_be_found
     @mailmap.write("<proper@email.xx> Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -401,7 +401,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_email_name_email_with_invalid_empty
+  def test_check_mailmap_on_email_name_email_with_invalid_empty_should_not_be_found
     @mailmap.write("<proper@email.xx> Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -411,7 +411,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_email_name_email_with_invalid_name
+  def test_check_mailmap_on_email_name_email_with_invalid_name_should_not_be_found
     @mailmap.write("<proper@email.xx> Commit Name <commit@email.xx>\n")
     @mailmap.close
 
@@ -421,7 +421,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_comment_with_email
+  def test_check_mailmap_on_comment_with_email_should_not_be_found
     @mailmap.write("# Comment\n")
     @mailmap.close
 
@@ -431,7 +431,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_comment_with_name_email
+  def test_check_mailmap_on_comment_with_name_email_should_not_be_found
     @mailmap.write("# Comment\n")
     @mailmap.close
 
@@ -441,7 +441,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_comment_with_wrong_email
+  def test_check_mailmap_on_comment_with_wrong_email_should_not_be_found
     @mailmap.write("# Comment\n")
     @mailmap.close
 
@@ -451,7 +451,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_comment_with_invalid_empty
+  def test_check_mailmap_on_comment_with_invalid_empty_should_not_be_found
     @mailmap.write("# Comment\n")
     @mailmap.close
 
@@ -461,7 +461,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_comment_with_invalid_name
+  def test_check_mailmap_on_comment_with_invalid_name_should_not_be_found
     @mailmap.write("# Comment\n")
     @mailmap.close
 
@@ -471,7 +471,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_trailing_comment_with_email
+  def test_check_mailmap_on_trailing_comment_with_email_should_be_found
     @mailmap.write("Proper Name <commit@email.xx> # Comment\n")
     @mailmap.close
 
@@ -481,7 +481,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_trailing_comment_with_name_email
+  def test_check_mailmap_on_trailing_comment_with_name_email_should_be_found
     @mailmap.write("Proper Name <commit@email.xx> # Comment\n")
     @mailmap.close
 
@@ -491,7 +491,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_trailing_comment_with_wrong_email
+  def test_check_mailmap_on_trailing_comment_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name <commit@email.xx> # Comment\n")
     @mailmap.close
 
@@ -501,7 +501,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_trailing_comment_with_invalid_empty
+  def test_check_mailmap_on_trailing_comment_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name <commit@email.xx> # Comment\n")
     @mailmap.close
 
@@ -511,7 +511,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_trailing_comment_with_invalid_name
+  def test_check_mailmap_on_trailing_comment_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name <commit@email.xx> # Comment\n")
     @mailmap.close
 
@@ -521,7 +521,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_with_email
+  def test_check_mailmap_on_invalid_name_with_email_should_not_be_found
     @mailmap.write("Commit Name\n")
     @mailmap.close
 
@@ -531,7 +531,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_with_name_email
+  def test_check_mailmap_on_invalid_name_with_name_email_should_not_be_found
     @mailmap.write("Commit Name\n")
     @mailmap.close
 
@@ -541,7 +541,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_with_wrong_email
+  def test_check_mailmap_on_invalid_name_with_wrong_email_should_not_be_found
     @mailmap.write("Commit Name\n")
     @mailmap.close
 
@@ -551,7 +551,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_with_invalid_empty
+  def test_check_mailmap_on_invalid_name_with_invalid_empty_should_not_be_found
     @mailmap.write("Commit Name\n")
     @mailmap.close
 
@@ -561,7 +561,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_with_invalid_name
+  def test_check_mailmap_on_invalid_name_with_invalid_name_should_not_be_found
     @mailmap.write("Commit Name\n")
     @mailmap.close
 
@@ -571,7 +571,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_email_name_with_email
+  def test_check_mailmap_on_invalid_name_email_name_with_email_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
     @mailmap.close
 
@@ -581,7 +581,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_email_name_with_name_email
+  def test_check_mailmap_on_invalid_name_email_name_with_name_email_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
     @mailmap.close
 
@@ -591,7 +591,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_email_name_with_wrong_email
+  def test_check_mailmap_on_invalid_name_email_name_with_wrong_email_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
     @mailmap.close
 
@@ -601,7 +601,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_email_name_with_invalid_empty
+  def test_check_mailmap_on_invalid_name_email_name_with_invalid_empty_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
     @mailmap.close
 
@@ -611,7 +611,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_email_name_with_invalid_name
+  def test_check_mailmap_on_invalid_name_email_name_with_invalid_name_should_not_be_found
     @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
     @mailmap.close
 
@@ -621,7 +621,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_email_with_email
+  def test_check_mailmap_on_invalid_email_with_email_should_not_be_found
     @mailmap.write("<commit@email.xx>\n")
     @mailmap.close
 
@@ -631,7 +631,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_email_with_name_email
+  def test_check_mailmap_on_invalid_email_with_name_email_should_not_be_found
     @mailmap.write("<commit@email.xx>\n")
     @mailmap.close
 
@@ -641,7 +641,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_email_with_wrong_email
+  def test_check_mailmap_on_invalid_email_with_wrong_email_should_not_be_found
     @mailmap.write("<commit@email.xx>\n")
     @mailmap.close
 
@@ -651,7 +651,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_email_with_invalid_empty
+  def test_check_mailmap_on_invalid_email_with_invalid_empty_should_not_be_found
     @mailmap.write("<commit@email.xx>\n")
     @mailmap.close
 
@@ -661,7 +661,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_email_with_invalid_name
+  def test_check_mailmap_on_invalid_email_with_invalid_name_should_not_be_found
     @mailmap.write("<commit@email.xx>\n")
     @mailmap.close
 
@@ -671,7 +671,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_email_name_with_email
+  def test_check_mailmap_on_invalid_email_name_with_email_should_not_be_found
     @mailmap.write("<commit@email.xx> Proper Name\n")
     @mailmap.close
 
@@ -681,7 +681,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_email_name_with_name_email
+  def test_check_mailmap_on_invalid_email_name_with_name_email_should_not_be_found
     @mailmap.write("<commit@email.xx> Proper Name\n")
     @mailmap.close
 
@@ -691,7 +691,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_email_name_with_wrong_email
+  def test_check_mailmap_on_invalid_email_name_with_wrong_email_should_not_be_found
     @mailmap.write("<commit@email.xx> Proper Name\n")
     @mailmap.close
 
@@ -701,7 +701,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_email_name_with_invalid_empty
+  def test_check_mailmap_on_invalid_email_name_with_invalid_empty_should_not_be_found
     @mailmap.write("<commit@email.xx> Proper Name\n")
     @mailmap.close
 
@@ -711,7 +711,7 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_email_name_with_invalid_name
+  def test_check_mailmap_on_invalid_email_name_with_invalid_name_should_not_be_found
     @mailmap.write("<commit@email.xx> Proper Name\n")
     @mailmap.close
 
