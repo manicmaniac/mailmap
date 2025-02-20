@@ -21,6 +21,106 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     @mailmap.close!
   end
 
+  def test_check_mailmap_on_empty_with_email
+    @mailmap.write("\n")
+    @mailmap.close
+
+    expected = ["<commit@email.xx>\n", '', 0]
+    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_empty_with_name_email
+    @mailmap.write("\n")
+    @mailmap.close
+
+    expected = ["Commit Name <commit@email.xx>\n", '', 0]
+    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_empty_with_wrong_email
+    @mailmap.write("\n")
+    @mailmap.close
+
+    expected = ["<wrong@email.xx>\n", '', 0]
+    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_empty_with_invalid_empty
+    @mailmap.write("\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_empty_with_invalid_name
+    @mailmap.write("\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
+    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_name_name_with_email
+    @mailmap.write("Proper Name Commit Name\n")
+    @mailmap.close
+
+    expected = ["<commit@email.xx>\n", '', 0]
+    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_name_name_with_name_email
+    @mailmap.write("Proper Name Commit Name\n")
+    @mailmap.close
+
+    expected = ["Commit Name <commit@email.xx>\n", '', 0]
+    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_name_name_with_wrong_email
+    @mailmap.write("Proper Name Commit Name\n")
+    @mailmap.close
+
+    expected = ["<wrong@email.xx>\n", '', 0]
+    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_name_name_with_invalid_empty
+    @mailmap.write("Proper Name Commit Name\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_name_name_with_invalid_name
+    @mailmap.write("Proper Name Commit Name\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
+    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
   def test_check_mailmap_on_name_email_with_email
     @mailmap.write("Proper Name <commit@email.xx>\n")
     @mailmap.close
@@ -47,6 +147,16 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
 
     expected = ["<wrong@email.xx>\n", '', 0]
     actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_name_email_with_invalid_empty
+    @mailmap.write("Proper Name <commit@email.xx>\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
 
     assert_equal(expected, actual)
   end
@@ -91,8 +201,68 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
+  def test_check_mailmap_on_email_email_with_invalid_empty
+    @mailmap.write("<proper@email.xx> <commit@email.xx>\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
   def test_check_mailmap_on_email_email_with_invalid_name
     @mailmap.write("<proper@email.xx> <commit@email.xx>\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
+    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_name_name_email_with_email
+    @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
+    @mailmap.close
+
+    expected = ["Proper Name Commit Name <commit@email.xx>\n", '', 0]
+    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_name_name_email_with_name_email
+    @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
+    @mailmap.close
+
+    expected = ["Proper Name Commit Name <commit@email.xx>\n", '', 0]
+    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_name_name_email_with_wrong_email
+    @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
+    @mailmap.close
+
+    expected = ["<wrong@email.xx>\n", '', 0]
+    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_name_name_email_with_invalid_empty
+    @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_name_name_email_with_invalid_name
+    @mailmap.write("Proper Name Commit Name <commit@email.xx>\n")
     @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
@@ -127,6 +297,16 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
 
     expected = ["<wrong@email.xx>\n", '', 0]
     actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_name_email_email_with_invalid_empty
+    @mailmap.write("Proper Name <proper@email.xx> <commit@email.xx>\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
 
     assert_equal(expected, actual)
   end
@@ -171,6 +351,16 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
+  def test_check_mailmap_on_name_email_name_email_with_invalid_empty
+    @mailmap.write("Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
   def test_check_mailmap_on_name_email_name_email_with_invalid_name
     @mailmap.write("Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n")
     @mailmap.close
@@ -207,6 +397,16 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
 
     expected = ["<wrong@email.xx>\n", '', 0]
     actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_email_name_email_with_invalid_empty
+    @mailmap.write("<proper@email.xx> Commit Name <commit@email.xx>\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
 
     assert_equal(expected, actual)
   end
@@ -251,6 +451,16 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
+  def test_check_mailmap_on_comment_with_invalid_empty
+    @mailmap.write("# Comment\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
   def test_check_mailmap_on_comment_with_invalid_name
     @mailmap.write("# Comment\n")
     @mailmap.close
@@ -287,6 +497,16 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
 
     expected = ["<wrong@email.xx>\n", '', 0]
     actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_trailing_comment_with_invalid_empty
+    @mailmap.write("Proper Name <commit@email.xx> # Comment\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
 
     assert_equal(expected, actual)
   end
@@ -331,6 +551,16 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
+  def test_check_mailmap_on_invalid_name_with_invalid_empty
+    @mailmap.write("Commit Name\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
   def test_check_mailmap_on_invalid_name_with_invalid_name
     @mailmap.write("Commit Name\n")
     @mailmap.close
@@ -341,8 +571,8 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_name_with_email
-    @mailmap.write("Proper Name Commit Name\n")
+  def test_check_mailmap_on_invalid_name_email_name_with_email
+    @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
     @mailmap.close
 
     expected = ["<commit@email.xx>\n", '', 0]
@@ -351,8 +581,8 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_name_with_name_email
-    @mailmap.write("Proper Name Commit Name\n")
+  def test_check_mailmap_on_invalid_name_email_name_with_name_email
+    @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
     @mailmap.close
 
     expected = ["Commit Name <commit@email.xx>\n", '', 0]
@@ -361,8 +591,8 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_name_with_wrong_email
-    @mailmap.write("Proper Name Commit Name\n")
+  def test_check_mailmap_on_invalid_name_email_name_with_wrong_email
+    @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
     @mailmap.close
 
     expected = ["<wrong@email.xx>\n", '', 0]
@@ -371,8 +601,18 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
-  def test_check_mailmap_on_invalid_name_name_with_invalid_name
-    @mailmap.write("Proper Name Commit Name\n")
+  def test_check_mailmap_on_invalid_name_email_name_with_invalid_empty
+    @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_invalid_name_email_name_with_invalid_name
+    @mailmap.write("Proper Name <proper@email.xx> Commit Name\n")
     @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
@@ -411,8 +651,68 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
     assert_equal(expected, actual)
   end
 
+  def test_check_mailmap_on_invalid_email_with_invalid_empty
+    @mailmap.write("<commit@email.xx>\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
   def test_check_mailmap_on_invalid_email_with_invalid_name
     @mailmap.write("<commit@email.xx>\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]
+    actual = check_mailmap('Commit Name', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_invalid_email_name_with_email
+    @mailmap.write("<commit@email.xx> Proper Name\n")
+    @mailmap.close
+
+    expected = ["<commit@email.xx>\n", '', 0]
+    actual = check_mailmap('<commit@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_invalid_email_name_with_name_email
+    @mailmap.write("<commit@email.xx> Proper Name\n")
+    @mailmap.close
+
+    expected = ["Commit Name <commit@email.xx>\n", '', 0]
+    actual = check_mailmap('Commit Name <commit@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_invalid_email_name_with_wrong_email
+    @mailmap.write("<commit@email.xx> Proper Name\n")
+    @mailmap.close
+
+    expected = ["<wrong@email.xx>\n", '', 0]
+    actual = check_mailmap('<wrong@email.xx>', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_invalid_email_name_with_invalid_empty
+    @mailmap.write("<commit@email.xx> Proper Name\n")
+    @mailmap.close
+
+    expected = ['', "fatal: unable to parse contact: \n", 128]
+    actual = check_mailmap('', mailmap_path: @mailmap.path)
+
+    assert_equal(expected, actual)
+  end
+
+  def test_check_mailmap_on_invalid_email_name_with_invalid_name
+    @mailmap.write("<commit@email.xx> Proper Name\n")
     @mailmap.close
 
     expected = ['', "fatal: unable to parse contact: Commit Name\n", 128]

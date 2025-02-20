@@ -37,21 +37,26 @@ class CheckMailmapCompatibilityTest < Minitest::Test # rubocop:disable Metrics/C
   end
   <%-
     mailmap_patterns = {
+      empty: "\n",
+      name_name: "Proper Name Commit Name\n",
       name_email: "Proper Name <commit@email.xx>\n",
       email_email: "<proper@email.xx> <commit@email.xx>\n",
+      name_name_email: "Proper Name Commit Name <commit@email.xx>\n",
       name_email_email: "Proper Name <proper@email.xx> <commit@email.xx>\n",
       name_email_name_email: "Proper Name <proper@email.xx> Commit Name <commit@email.xx>\n",
       email_name_email: "<proper@email.xx> Commit Name <commit@email.xx>\n",
       comment: "# Comment\n",
       trailing_comment: "Proper Name <commit@email.xx> # Comment\n",
       invalid_name: "Commit Name\n",
-      invalid_name_name: "Proper Name Commit Name\n",
-      invalid_email: "<commit@email.xx>\n"
+      invalid_name_email_name: "Proper Name <proper@email.xx> Commit Name\n",
+      invalid_email: "<commit@email.xx>\n",
+      invalid_email_name: "<commit@email.xx> Proper Name\n"
     }
     contact_patterns = {
       email: '<commit@email.xx>',
       name_email: 'Commit Name <commit@email.xx>',
       wrong_email: '<wrong@email.xx>',
+      invalid_empty: '',
       invalid_name: 'Commit Name'
     }
   -%>
