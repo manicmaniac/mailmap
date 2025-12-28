@@ -14,7 +14,7 @@ jobs:
         - '3.3'
         - '3.4'
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -38,7 +38,7 @@ jobs:
     - name: Check test matrix status
       if: ${{ needs.test.result != 'success' }}
       run: exit 1
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - uses: actions/download-artifact@v4
       with:
         pattern: coverages-*
@@ -51,7 +51,7 @@ jobs:
   lint:
     runs-on: ubuntu-24.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
