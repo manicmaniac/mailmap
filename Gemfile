@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem 'minitest', '~> 6.0'
+gem 'minitest', RUBY_VERSION >= '3.2' ? '~> 6.0' : '~> 5.0'
 gem 'rake', '~> 13.0'
 gem 'rbs', '~> 3.0'
 gem 'rubocop', '~> 1.7', require: false
